@@ -10,6 +10,7 @@ const notes = defineCollection({
   schema: z.object({
     slug: z.string(),
     lang: z.enum(['ko', 'en']),
+    kind: z.enum(['reading', 'letter']).default('reading'),
     title: z.string(),
     heading: z.string(),
     pageTitle: z.string(),

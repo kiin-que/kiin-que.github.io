@@ -108,6 +108,7 @@
     "독서록",
     "Reading Note"
   ],
+  "letterNote": ["편지", "Letter"],
   "read": [
     "글 읽기",
     "Read the note"

@@ -14,7 +14,7 @@ const home = localPath(lang);
   <a class="reading-back u-grow" href={home + '#writing'}>{t('backList')}</a>
   <article class="reading-article" aria-labelledby="reading-title">
     <header>
-      <p class="reading-meta"><span>{t('readingNote')}</span><time datetime={meta.date}>{formatWorkDate(meta.date, lang)}</time></p>
+      <p class="reading-meta"><span>{t(meta.kind === 'letter' ? 'letterNote' : 'readingNote')}</span><time datetime={meta.date}>{formatWorkDate(meta.date, lang)}</time></p>
       <h1 id="reading-title">{meta.heading}</h1>
       <p class="reading-deck">{meta.description}</p>
     </header>

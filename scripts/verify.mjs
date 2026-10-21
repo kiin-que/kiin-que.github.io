@@ -74,6 +74,7 @@ for (const name of pages) {
     assert.equal(document.querySelector('h1').textContent, note.heading);
     assert.equal(document.querySelector('.reading-deck').textContent, note.description);
     assert.equal(document.querySelector('time').getAttribute('datetime'), note.date);
+    assert.equal(document.querySelector('.reading-meta span').textContent, note.kind === 'letter' ? (en ? 'Letter' : '편지') : (en ? 'Reading Note' : '독서록'));
     assert.ok(document.querySelectorAll('.reading-body p').length > 0, 'Empty note body: ' + name);
     assert.equal(document.querySelector('.reading-credits')?.textContent ?? '', note.source ?? '');
   } else {

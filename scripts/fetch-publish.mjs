@@ -9,6 +9,7 @@ if (fs.existsSync('.env')) process.loadEnvFile('.env');
 const OUT = path.resolve('.publish');
 const MEDIA = path.resolve('public/media/works');
 const CATEGORIES = ['language', 'thought', 'experiment'];
+const KINDS = ['reading', 'letter'];
 const IMAGE = /\.(jpe?g|png|webp|gif|avif)$/i;
 const DATE = /^\d{4}-\d{2}(-\d{2})?$/;
 const SLUG = /^[a-z0-9]+(-[a-z0-9]+)*$/;
@@ -80,6 +81,7 @@ for (const file of files) {
     if (data.slug !== slug || data.lang !== lang) throw new Error(file.path + ': slug/lang must match the file name');
     if (data.pageTitle !== data.heading + ' · Ki In') throw new Error(file.path + ': pageTitle must be heading + " · Ki In"');
     if (!CATEGORIES.includes(data.category)) throw new Error(file.path + ': unknown category "' + data.category + '"');
+    if (data.kind !== undefined && !KINDS.includes(data.kind)) throw new Error(file.path + ': kind must be "reading" or "letter"');
     if (!DATE.test(data.date)) throw new Error(file.path + ': date must be YYYY-MM-DD or YYYY-MM');
     const entry = notes.get(slug) ?? {};
     entry[lang] = { data, text };
@@ -103,7 +105,7 @@ for (const file of files) {
 
 for (const [slug, entry] of notes) check(() => {
   if (!entry.ko || !entry.en) throw new Error('notes/' + slug + ': both .ko.md and .en.md are required');
-  for (const key of ['date', 'category']) {
+  for (const key of ['date', 'category', 'kind']) {
     if (entry.ko.data[key] !== entry.en.data[key]) throw new Error('notes/' + slug + ': "' + key + '" differs between ko and en');
   }
 });

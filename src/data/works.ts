@@ -40,13 +40,13 @@ export async function getImageWorks(lang: Language) {
 export async function getWorks(lang: Language) {
   return [
     ...(await getNotes(lang)).map(note => ({
-      slug: note.slug, type: 'note' as const, category: note.frontmatter.category,
+      slug: note.slug, type: 'note' as const, label: note.frontmatter.kind === 'letter' ? 'letterNote' : 'readingNote', category: note.frontmatter.category,
       title: note.frontmatter.title, description: note.frontmatter.description,
       date: note.frontmatter.date, dateLabel: formatWorkDate(note.frontmatter.date, lang),
       path: 'writing/' + note.slug + '/', image: '', alt: '', width: 0, height: 0,
     })),
     ...(await getImageWorks(lang)).map(work => ({
-      ...work, type: 'image' as const, date: work.created, path: 'works/' + work.slug + '/',
+      ...work, type: 'image' as const, label: 'imageWork', date: work.created, path: 'works/' + work.slug + '/',
     })),
   ];
 }

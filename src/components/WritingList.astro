@@ -10,7 +10,7 @@ const works = await getWorks(lang);
   <a class="writing-entry-link" href={localPath(lang, work.path)}>
     {work.type === 'image' && <img class="writing-thumbnail" src={withBase(work.image)} width={work.width} height={work.height} alt={work.alt} loading="lazy" decoding="async" />}
     <div class="writing-entry-text">
-      <p class="writing-meta"><span>{t(work.type === 'image' ? 'imageWork' : 'readingNote')}</span><time datetime={work.date}>{work.dateLabel}</time></p>
+      <p class="writing-meta"><span>{t(work.label)}</span><time datetime={work.date}>{work.dateLabel}</time></p>
       <h3 class="writing-title">{work.title}</h3>
       <p class="writing-excerpt">{work.description}</p>
       <span class="writing-read"><span class="u-grow">{t(work.type === 'image' ? 'viewWork' : 'read')}</span> <span aria-hidden="true">→</span></span>

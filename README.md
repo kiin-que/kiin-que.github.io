@@ -27,7 +27,7 @@ pnpm preview
 
 글과 이미지 작업의 원본은 Drive의 `archive/publish/` 한 곳에만 둡니다. 형식은 `archive/_meta/metadata-guide.md`를 따릅니다.
 
-- `publish/notes/{slug}.ko.md`, `{slug}.en.md`: 글. 두 언어가 모두 있어야 발행됩니다.
+- `publish/notes/{slug}.ko.md`, `{slug}.en.md`: 글. 두 언어가 모두 있어야 발행됩니다. `kind`가 `"letter"`이면 "편지", 없거나 `"reading"`이면 "독서록"으로 표시합니다.
 - `publish/works/{slug}.md` + 이미지 파일: 이미지 작업. 원본 파일명과 확장자를 보존합니다. 사용자가 제목을 지정하지 않으면 '무제'/'Untitled'로 표시하며 임의로 제목을 만들지 않습니다. 생성 시기가 월까지만 확인되면 YYYY-MM을 씁니다.
 
 빌드 순서:
