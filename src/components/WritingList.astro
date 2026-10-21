@@ -1,0 +1,16 @@
+---
+import { getNotes } from '../data/notes';
+import { translate, localPath } from '../lib/i18n';
+const { lang } = Astro.props;
+const t = (key: string) => translate(lang, key);
+---
+<ul class="writing-list" id="writing-list">
+{getNotes(lang).map(note => <li class="writing-entry" data-writing-category={note.frontmatter.category}>
+  <a class="writing-entry-link" href={localPath(lang, 'writing/' + note.slug + '/')}>
+    <p class="writing-meta"><span>{t('readingNote')}</span><time datetime={note.frontmatter.date}>{t('date')}</time></p>
+    <h3 class="writing-title">{note.frontmatter.title}</h3>
+    <p class="writing-excerpt">{note.frontmatter.description}</p>
+    <span class="writing-read"><span>{t('read')}</span> <span aria-hidden="true">→</span></span>
+  </a>
+</li>)}
+</ul>

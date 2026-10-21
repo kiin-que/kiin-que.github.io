@@ -1,0 +1,23 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { translate, localPath } from '../lib/i18n';
+const { lang, note } = Astro.props;
+const { frontmatter: meta, Content } = note;
+const t = (key: string) => translate(lang, key);
+const home = localPath(lang);
+---
+<PageLayout lang={lang} title={meta.pageTitle} description={meta.description} article slug={note.slug} published={meta.date}>
+<main id="main" class="reading-main">
+  <a class="reading-back u-grow" href={home + '#writing'}>{t('backList')}</a>
+  <article class="reading-article" aria-labelledby="reading-title">
+    <header>
+      <p class="reading-meta"><span>{t('readingNote')}</span><time datetime={meta.date}>{t('date')}</time></p>
+      <h1 id="reading-title">{meta.heading}</h1>
+      <p class="reading-deck">{meta.description}</p>
+    </header>
+    <div class="reading-body"><Content /></div>
+    <footer class="reading-credits"><p>{meta.source}</p></footer>
+  </article>
+  <nav class="reading-bottom" aria-label={t('readingNavigation')}><a href={home + '#writing'} class="u-grow">{t('backQuestions')}</a><a href="#main" class="reading-top u-grow">{t('shortTop')}</a></nav>
+</main>
+</PageLayout>

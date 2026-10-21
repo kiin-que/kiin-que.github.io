@@ -1,0 +1,9 @@
+---
+import ReadingNote from '../../../components/ReadingNote.astro';
+import { getNotes } from '../../../data/notes';
+export function getStaticPaths() {
+  return getNotes('en').map(note => ({ params: { slug: note.slug }, props: { note } }));
+}
+const { note } = Astro.props;
+---
+<ReadingNote lang="en" note={note} />

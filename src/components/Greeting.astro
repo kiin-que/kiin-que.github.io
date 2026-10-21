@@ -1,0 +1,7 @@
+---
+import { translate } from '../lib/i18n';
+const { lang, messageKey } = Astro.props;
+const original = translate('ko', messageKey);
+const gloss = translate('en', messageKey).slice(original.length).trim();
+---
+{lang === 'en' ? <><strong lang="ko">{original}</strong>{' '}<em lang="en">{gloss}</em></> : original}

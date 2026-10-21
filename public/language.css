@@ -1,0 +1,76 @@
+@font-face { font-family: "Lora"; src: url("assets/fonts/Lora-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "Lora"; src: url("assets/fonts/Lora-Bold.woff2") format("woff2"); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: "Cormorant Garamond"; src: url("assets/fonts/CormorantGaramond-SemiBold.woff2") format("woff2"); font-weight: 600; font-style: normal; font-display: swap; }
+@font-face { font-family: "Gowun Batang"; src: url("assets/fonts/GowunBatang-Regular.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: "NanumSonPyeonJiCe"; src: url("assets/fonts/NanumSonPyeonJiCe.woff2") format("woff2"); font-weight: 400; font-style: normal; font-display: swap; }
+:root { --f-hand: "NanumSonPyeonJiCe", "Nanum Pen Script", "Gowun Batang", cursive; }
+.lang-en { --f-body: "Lora", "Gowun Batang", Georgia, serif; --f-head: "Cormorant Garamond", "Gowun Batang", Georgia, serif; }
+.lang-en :is(.letter-page, .reading-page) { font-family: var(--f-body); letter-spacing: 0; word-break: normal; }
+.lang-en :is(.letter-body, .letter-nav, .section-heading, .writing-filter, .writing-title, .writing-excerpt, .writing-read, .contact-link, .letter-footer, .reading-nav, .reading-back, .reading-body, .reading-deck, .reading-meta, .reading-credits, .reading-tags, .reading-bottom, .reading-site-footer) { font-family: var(--f-body); }
+.lang-en .section-heading h2 { font-family: var(--f-body); font-weight: 700; font-size: 25px; line-height: 1.55; letter-spacing: -.02em; }
+.lang-en :is(.letter-hero h1, .letter-meta h2, .letter-question) { font-family: var(--f-head); font-weight: 500; letter-spacing: .01em; }
+.lang-en .letter-question { font-size: 34px; }
+.lang-en .letter-body { font-size: 18px; line-height: 1.95; }
+.lang-en .writing-title { font-weight: 700; letter-spacing: -.015em; }
+/* English reading shares the Korean page's palette, column and quiet controls. */
+.lang-en .reading-main { width: min(calc(100% - 48px), 580px); margin-top: 32px; }
+.lang-en .reading-article { margin-top: 28px; }
+.lang-en .reading-meta { align-items: center; gap: 8px 14px; font-size: 13px; line-height: 1.6; }
+.lang-en .reading-meta > span { padding: 3px 9px; font-weight: 700; }
+.lang-en .reading-article h1 { margin-top: 16px; font-family: "Lora", "Gowun Batang", Georgia, serif; font-size: clamp(28px, 4.5vw, 32px); font-weight: 700; line-height: 1.4; letter-spacing: -.015em; white-space: normal; word-break: normal; text-wrap: pretty; }
+.lang-en .reading-deck { margin-top: 16px; font-family: var(--f-head); font-size: 20px; line-height: 1.5; font-weight: 400; font-style: italic; letter-spacing: 0; color: var(--muted); }
+.lang-en .reading-body { margin-top: 28px; font-family: var(--f-head); font-size: 18.5px; font-weight: 500; line-height: 1.75; letter-spacing: .005em; word-break: normal; }
+.lang-en .reading-body p { white-space: normal; text-wrap: pretty; }
+.lang-en .reading-body p + p { margin-top: 24px; }
+.lang-en .reading-credits { margin-top: 36px; padding: 16px 18px; font-size: 13px; line-height: 1.75; }
+.lang-en .reading-bottom { margin-top: 36px; gap: 8px 24px; font-size: 14px; line-height: 1.6; }
+
+
+
+.lang-en .letter-brand strong { font-family: var(--f-head); font-size: 27px; font-weight: 600; font-style: normal; letter-spacing: .01em; }
+.lang-en .signature { font-family: var(--f-hand); font-size: 36px; }
+.lang-en .letter-thanks { font-family: var(--f-body); }
+.letter-like-count { font-family: "Cormorant Garamond", "Gowun Batang", Georgia, serif; font-size: 20px; font-weight: 600; }
+:is(.letter-nav, .reading-nav) .lang-btn { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 10px; border: 0; background: transparent; color: var(--muted); font-family: "Cormorant Garamond", Georgia, serif; font-size: 23px; font-weight: 400; font-style: italic; line-height: 1; cursor: pointer; }
+.lang-en :is(.letter-nav, .reading-nav) .lang-btn { font-family: "Gowun Batang", Georgia, serif; font-size: 16px; font-weight: 400; font-style: normal; }
+.lang-en :is(.letter-nav, .reading-nav) { flex-wrap: wrap; gap: 0 4px; }
+.lang-en .writing-filters { gap: 10px; }
+@media (max-width: 540px) {
+  .lang-en .letter-nav { font-size: 13px; }
+  .lang-en .letter-nav .u-pad { padding-inline: 6px; --u-inset: 6px; }
+  .lang-en .letter-nav .lang-btn { font-size: 14px; }
+  .lang-en .reading-nav { font-size: 14px; gap: 0; }
+  .lang-en .reading-nav .u-pad { padding-inline: 5px; --u-inset: 5px; }
+  .lang-en .reading-nav .lang-btn { font-size: 14px; }
+  .lang-en .section-heading h2 { font-size: 22px; }
+  .lang-en .letter-body { font-size: 17px; }
+  .lang-en .writing-filters { gap: 8px; }
+  .lang-en .writing-filter { font-size: 13px; }
+}
+
+/* Copyright keeps the same quiet Korean typeface in both languages. */
+:is(.letter-footer, .reading-site-footer) > p,
+.lang-en :is(.letter-footer, .reading-site-footer) > p { font-family: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-weight: 400; }
+
+.lang-en .letter-body strong[lang="ko"] { font-family: "Gowun Dodum", "Malgun Gothic", sans-serif; font-size: 20px; font-weight: 400; line-height: 1.6; letter-spacing: -.015em; }
+.lang-en .letter-body em[lang="en"] { font-family: "Cormorant Garamond", Georgia, serif; font-size: 18px; font-weight: 400; font-style: italic; line-height: 1.4; vertical-align: 4px; letter-spacing: 0; color: var(--muted); }
+
+
+.lang-en .letter-introduction .letter-question { font-family: var(--f-body); font-size: 18px; line-height: 1.95; letter-spacing: 0; }
+.lang-en .letter-introduction .letter-body p[data-i18n="helloQuestion"] { margin-top: 8px; }
+
+.lang-en .letter-introduction .letter-body { font-family: "Cormorant Garamond", "Gowun Batang", Georgia, serif; font-size: 22px; font-weight: 400; font-style: italic; line-height: 1.7; letter-spacing: .005em; }
+
+.lang-en .letter-body strong[lang="ko"] { font-style: normal; }
+.lang-en .letter-introduction .letter-thanks { margin-top: 48px; }
+
+@media (max-width: 540px) {
+  .lang-en .reading-main { margin-top: 24px; }
+  .lang-en .reading-article { margin-top: 24px; }
+  .lang-en .reading-article h1 { margin-top: 14px; font-size: 28px; line-height: 1.4; }
+  .lang-en .reading-deck { margin-top: 14px; font-size: 19px; }
+  .lang-en .reading-body { margin-top: 26px; font-size: 18px; line-height: 1.75; }
+  .lang-en .reading-body p + p { margin-top: 24px; }
+  .lang-en .reading-credits { margin-top: 28px; padding: 14px 16px; }
+  .lang-en .reading-bottom { margin-top: 28px; gap: 8px 16px; font-size: 13px; }
+}

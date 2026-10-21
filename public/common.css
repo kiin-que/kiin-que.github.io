@@ -1,0 +1,48 @@
+@font-face{font-family:'Cormorant Garamond';src:url('assets/fonts/CormorantGaramond-Medium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant Garamond';src:url('assets/fonts/CormorantGaramond-Italic.ttf') format('truetype');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:Pretendard;src:url('assets/fonts/PretendardVariable.woff2') format('woff2');font-weight:100 900;font-style:normal;font-display:swap}
+@font-face{font-family:Diphylleia;src:url('assets/fonts/Diphylleia-Regular.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Gowun Dodum';src:url('assets/fonts/GowunDodum-Regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:40px}
+body{margin:0;font-family:'Gowun Dodum','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;word-break:keep-all}
+button,input{font:inherit}
+button,a{-webkit-tap-highlight-color:transparent}
+button{color:inherit}
+a{color:inherit}
+img,svg{display:block}
+img{max-width:100%;height:auto}
+button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid currentColor;outline-offset:6px}
+::selection{background:#C3CAD9;color:#3B2B23}
+.icon{width:26px;height:26px;flex:none;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.sr-only,.visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip-link{position:fixed;top:12px;left:12px;z-index:100;padding:10px 16px;background:#EEDCC8;color:#3B2B23;transform:translateY(-200%)}
+.skip-link:focus{transform:none}
+.profile-tools{display:flex;justify-content:center;padding:0 24px 28px;font-size:14px;color:inherit;opacity:.72}
+.profile-tools button{border:0;padding:6px;background:none;cursor:pointer;text-underline-offset:4px;text-decoration:underline}
+.profile-dialog{width:min(560px,calc(100% - 32px));max-height:calc(100svh - 40px);border:0;padding:30px;background:#f8f7f0;color:#30392f}
+.profile-dialog::backdrop{background:#28352c55}
+.profile-dialog h2{font-size:24px;margin:0 0 8px;font-weight:550}
+.profile-dialog p{font-size:14px;margin:0 0 24px;line-height:1.6}
+.profile-dialog form{display:grid;gap:16px}
+.profile-dialog label{display:grid;gap:5px;font-size:14px;font-weight:500}
+.profile-dialog input{width:100%;border:0;border-bottom:1px solid #a7afa0;border-radius:0;padding:10px 0;background:transparent;color:inherit;font-size:16px}
+.profile-dialog input:focus{outline-offset:2px}
+.profile-dialog .form-actions{display:flex;gap:12px;justify-content:flex-end;margin-top:8px}
+.profile-dialog button{border:0;border-radius:0;padding:10px 18px;background:transparent;cursor:pointer}
+.profile-dialog button[type=submit]{background:#3f493d;color:#f8f7f0}
+.profile-toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 32px);padding:12px 18px;background:#30392f;color:#f8f7f0;z-index:110;font-size:14px;text-align:center}
+.profile-toast[hidden]{display:none}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+/* Fine growing underlines shared by navigation and quiet text actions. */
+.u-grow { position: relative; text-decoration: none; }
+.u-grow::after { content: ""; position: absolute; left: 0; right: 0; bottom: var(--u-bottom, 10px); height: 1.2px; background: var(--u-color, currentColor); transform: none; clip-path: inset(0 100% 0 0); transition: clip-path 250ms ease; pointer-events: none; }
+.u-on { --u-color: var(--accent, #e3a07a); }
+.u-pad::after { left: var(--u-inset, 10px); right: var(--u-inset, 10px); }
+.u-grow:hover::after, .u-grow:focus-visible::after, .u-on::after { clip-path: inset(0 0 0 0); }
+.letter-nav .u-pad, .reading-nav .u-pad { padding-inline: 10px; }
+.letter-thanks > .u-grow, .contact-label.u-grow { display: inline-block; --u-bottom: -2px; }
+.letter-thanks:is(:hover, :focus-visible) > .u-grow::after,
+.contact-link:is(:hover, :focus-visible) .u-grow::after { clip-path: inset(0 0 0 0); }
+@media (prefers-reduced-motion: reduce) { .u-grow::after { transition: none; } }

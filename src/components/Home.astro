@@ -1,0 +1,68 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import WritingList from './WritingList.astro';
+import { getNotes } from '../data/notes';
+import Greeting from './Greeting.astro';
+import { translate, withBase } from '../lib/i18n';
+const { lang } = Astro.props;
+const t = (key: string) => translate(lang, key);
+const publishedNotes = getNotes(lang);
+const filters = ['all', 'language', 'thought', 'experiment'];
+const countNotes = (category: string) => publishedNotes.filter(note => category === 'all' || note.frontmatter.category === category).length;
+---
+<PageLayout lang={lang} title={t('homeTitle')} description={t('homeDescription')}>
+<main id="main">
+    <section class="letter-hero" aria-label={t("portraitLabel")} data-i18n-aria-label="portraitLabel">
+      <figure class="hero-portrait"><img src={withBase("assets/portrait-soft.png")} width="1122" height="1402" alt={t("portraitAlt")} data-i18n-alt="portraitAlt" fetchpriority="high" decoding="async"></figure>
+    </section>
+    <section id="letter" class="personal-letter letter-introduction" aria-labelledby="letter-title">
+      <h1 id="letter-title" class="sr-only" data-i18n="letterTitle">{t("letterTitle")}</h1>
+      <div class="letter-body">
+        <p data-i18n="helloPeriod"><Greeting lang={lang} messageKey="helloPeriod" /></p>
+        <p class="letter-question" data-i18n="helloQuestion"><Greeting lang={lang} messageKey="helloQuestion" /></p>
+        <p data-i18n="letter1">{t("letter1")}</p>
+        <p data-i18n="letter2">{t("letter2")}</p>
+        <p data-i18n="letter3">{t("letter3")}</p>
+        <p data-i18n="letter4">{t("letter4")}</p>
+      </div>
+        <button type="button" class="letter-thanks" aria-pressed="false">
+          <svg class="apricot-icon" width="30" height="30" viewBox="0 0 28 28" aria-hidden="true">
+            <path d="M14 8.2C17.6 5.6 24.6 7.4 24.6 15C24.6 21.6 19.6 25.6 14 25.6C8.4 25.6 3.4 21.6 3.4 15C3.4 7.4 10.4 5.6 14 8.2Z" fill="#FDF9F3" />
+            <path class="juice" d="M14 8.2C17.6 5.6 24.6 7.4 24.6 15C24.6 21.6 19.6 25.6 14 25.6C8.4 25.6 3.4 21.6 3.4 15C3.4 7.4 10.4 5.6 14 8.2Z" fill="#E3A07A" />
+            <ellipse class="shine" cx="9.4" cy="13.2" rx="2.3" ry="1.4" transform="rotate(-32 9.4 13.2)" fill="#FDF9F3" />
+            <path d="M14 8.2C17.6 5.6 24.6 7.4 24.6 15C24.6 21.6 19.6 25.6 14 25.6C8.4 25.6 3.4 21.6 3.4 15C3.4 7.4 10.4 5.6 14 8.2Z" fill="none" stroke="#3B2B23" stroke-width="1.2" stroke-linejoin="round" />
+            <path d="M14 9C12.6 12.6 12.7 17.6 14.2 22.6" fill="none" stroke="#3B2B23" stroke-width="0.9" stroke-linecap="round" opacity="0.5" />
+            <path d="M14 8.2C14.2 6.6 14.6 5.4 15.4 4.4" fill="none" stroke="#3B2B23" stroke-width="1.2" stroke-linecap="round" />
+            <path d="M15.1 4.9C17 2.6 20.6 2.4 22.6 3.8C21 6.2 17.6 6.8 15.1 4.9Z" fill="#FDF9F3" stroke="#3B2B23" stroke-width="1.1" stroke-linejoin="round" />
+          </svg>
+          <span class="u-grow" data-i18n="like">{t("like")}</span>
+          <span class="letter-like-count" data-like-count=""><span>0</span></span>
+        </button>
+        <p class="sr-only" id="thanks-status" role="status"></p>
+    </section>
+    <section id="writing" class="writing-section" aria-labelledby="writing-title">
+      <header class="section-heading"><h2 id="writing-title" data-i18n="questions">{t("questions")}</h2>
+        <svg class="section-divider" viewBox="0 0 240 40" aria-hidden="true"><path d="M12 11C72 36 171 32 228 10" pathLength="1" /></svg>
+      </header>
+      <div class="writing-filters" role="group" aria-label={t("filterLabel")} data-i18n-aria-label="filterLabel">
+        {filters.map(category => <button type="button" class:list={['writing-filter', { 'u-on': category === 'all' }]} data-writing-filter={category} aria-pressed={category === 'all' ? 'true' : 'false'} aria-controls="writing-list">
+          <svg class="writing-filter-shape" viewBox="0 0 120 60" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path vector-effect="non-scaling-stroke" d="M22 0.75H98C109.74 0.75 119.25 10.26 119.25 22S109.74 43.25 98 43.25H75C72.8 43.25 71 45.05 71 47.25V48.25C71 54.33 66.08 59.25 60 59.25S49 54.33 49 48.25V47.25C49 45.05 47.2 43.25 45 43.25H22C10.26 43.25 0.75 33.74 0.75 22S10.26 0.75 22 0.75Z" /></svg><span class="writing-filter-label" data-i18n={category}>{t(category)}</span>
+          <span class="writing-filter-count">{countNotes(category)}<span class="sr-only">{lang === 'en' ? ' published works' : '개의 공개 작업'}</span></span>
+        </button>)}
+      </div>
+      <WritingList lang={lang} />
+      <p class="writing-empty" role="status" hidden data-i18n="empty">{t("empty")}</p>
+    </section>
+<section id="connect" class="connect-section" aria-labelledby="connect-title">
+      <header class="section-heading"><h2 id="connect-title" data-i18n="connectTitle">{t("connectTitle")}</h2>
+        <svg class="section-divider" viewBox="0 0 240 40" aria-hidden="true"><path d="M12 11C72 36 171 32 228 10" pathLength="1" /></svg>
+      </header>
+      <div class="contact-links" aria-label={t("contactLabel")} data-i18n-aria-label="contactLabel">
+        <button type="button" class="contact-link" data-copy-contact="email"><svg class="icon" aria-hidden="true"><use href={withBase("assets/icons.svg#mail")} /></svg><span><span class="contact-label u-grow" data-i18n="emailCopy">{t("emailCopy")}</span><small>Gmail</small></span></button>
+        <button type="button" class="contact-link" data-copy-contact="phone"><svg class="icon" aria-hidden="true"><use href={withBase("assets/icons.svg#phone")} /></svg><span><span class="contact-label u-grow" data-i18n="phone">{t("phone")}</span><small data-i18n="sms">{t("sms")}</small></span></button>
+        <button type="button" class="contact-link" data-pending-link="해움한국어 웹"><svg class="icon" aria-hidden="true"><use href={withBase("assets/icons.svg#web")} /></svg><span><span class="contact-label u-grow" data-i18n="website">{t("website")}</span><small><span data-i18n="webPage">{t("webPage")}</span> <span aria-hidden="true">↗</span></small></span></button>
+        <button type="button" class="contact-link" data-pending-link="Instagram · Threads"><svg class="icon" aria-hidden="true"><use href={withBase("assets/icons.svg#instagram")} /></svg><span><span class="contact-label u-grow">Instagram · Threads</span><small data-i18n="channel">{t("channel")}</small></span></button>
+      </div>
+    </section>
+  </main>
+</PageLayout>

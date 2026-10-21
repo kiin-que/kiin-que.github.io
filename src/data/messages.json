@@ -1,0 +1,294 @@
+{
+  "homeTitle": [
+    "Ki In · 안녕하세요?",
+    "Ki In · Are you at peace?"
+  ],
+  "homeDescription": [
+    "언어와 글, 사람 사이에 징검다리를 놓는 Ki In의 편지와 작업 아카이브.",
+    "A letter and a collection of questions, words, and experiments by Ki In."
+  ],
+  "skip": [
+    "본문으로 건너뛰기",
+    "Skip to content"
+  ],
+  "navLabel": [
+    "주요 메뉴",
+    "Main navigation"
+  ],
+  "letter": [
+    "편지",
+    "Letter"
+  ],
+  "questions": [
+    "물음표들",
+    "Questions"
+  ],
+  "connect": [
+    "연결",
+    "Connect"
+  ],
+  "letterTitle": [
+    "Ki In의 편지",
+    "A Letter"
+  ],
+  "portraitLabel": [
+    "Ki In 캐리커처",
+    "A portrait of Ki In"
+  ],
+  "portraitAlt": [
+    "볼에 손을 댄 채 편안하게 미소 짓는 단발의 Ki In 캐리커처",
+    "A smiling caricature of Ki In, with short hair and a hand resting against her cheek"
+  ],
+  "helloPeriod": [
+    "안녕하세요.",
+    "안녕하세요. (Hello.)"
+  ],
+  "helloQuestion": [
+    "안녕하세요?",
+    "안녕하세요? (Are you at peace?)"
+  ],
+  "letter1": [
+    "여기 온점과 물음표가 있습니다.",
+    "Between them lie a period and a question mark."
+  ],
+  "letter2": [
+    "질문은 탐색이고 도전이고 경청이라고 생각해요.",
+    "To me, a question is exploration, challenge, and deep listening."
+  ],
+  "letter3": [
+    "물음표를 닮은 자세로 오늘도 걸어 보렵니다.",
+    "With the posture of a question mark, I set out on my walk again today."
+  ],
+  "letter4": [
+    "그 과정의 기록을 공유합니다.",
+    "And here, I share the traces of that process."
+  ],
+  "like": [
+    "편지 잘 읽었어요",
+    "Thanks for the letter"
+  ],
+  "likeThanks": [
+    "응원 감사합니다 ^^",
+    "Thank you for your support ^^"
+  ],
+  "likedStatus": [
+    "따뜻한 마음, 고맙습니다. 공감 수 1.",
+    "Thank you for the warm thought. Appreciation count: 1."
+  ],
+  "unlikedStatus": [
+    "공감을 취소했어요. 공감 수 0.",
+    "Appreciation removed. Count: 0."
+  ],
+  "filterLabel": [
+    "물음표 분류",
+    "Question categories"
+  ],
+  "all": [
+    "전체",
+    "All"
+  ],
+  "language": [
+    "언어·교류",
+    "Language & Exchange"
+  ],
+  "thought": [
+    "사유·문장",
+    "Thoughts & Words"
+  ],
+  "experiment": [
+    "기획·실험",
+    "Plans & Experiments"
+  ],
+  "readingNote": [
+    "독서록",
+    "Reading Note"
+  ],
+  "date": [
+    "2025. 04. 21.",
+    "Apr 21, 2025"
+  ],
+  "read": [
+    "글 읽기",
+    "Read the note"
+  ],
+  "empty": [
+    "이 분류에는 아직 공개된 기록이 없습니다.",
+    "No notes have been published in this category yet."
+  ],
+  "connectTitle": [
+    "물음표가 떠오른다면..",
+    "If a question comes to mind…"
+  ],
+  "contactLabel": [
+    "연락할 수 있는 곳",
+    "Ways to connect"
+  ],
+  "website": [
+    "해움한국어 웹",
+    "해움한국어"
+  ],
+  "webPage": [
+    "웹페이지",
+    "Website"
+  ],
+  "emailCopy": [
+    "이메일 복사",
+    "Copy email"
+  ],
+  "phone": [
+    "연락처",
+    "Phone"
+  ],
+  "sms": [
+    "문자 가능",
+    "Text messages welcome"
+  ],
+  "channel": [
+    "채널 보기",
+    "View channels"
+  ],
+  "top": [
+    "맨 위로 올라가기",
+    "Back to top"
+  ],
+  "shortTop": [
+    "맨 위로 ↑",
+    "Back to top ↑"
+  ],
+  "about": [
+    "소개",
+    "About"
+  ],
+  "backList": [
+    "← 글목록으로",
+    "← Back to notes"
+  ],
+  "backQuestions": [
+    "← 물음표들로",
+    "← Back to questions"
+  ],
+  "readingNavigation": [
+    "글 읽기 이동",
+    "Reading navigation"
+  ],
+  "author": [
+    "Ki In",
+    "Ki In"
+  ],
+  "brandLabel": [
+    "Ki In 소개 페이지",
+    "About Ki In"
+  ],
+  "closeLabel": [
+    "답장 창 닫기",
+    "Close reply dialog"
+  ],
+  "topicLabel": [
+    "어떤 이야기로 연락주셨나요?",
+    "What would you like to talk about?"
+  ],
+  "topicKorean": [
+    "한국어 수업 및 발음·조음 코칭 문의",
+    "Korean lessons and pronunciation coaching"
+  ],
+  "topicReading": [
+    "윤독·독서 프로그램 및 교류 모임 참여",
+    "Reading groups and cultural exchange"
+  ],
+  "topicAi": [
+    "맞춤형 AI 교육 · 기관 강의 및 프로젝트 협의",
+    "AI workshops, talks, and project inquiries"
+  ],
+  "topicPublishing": [
+    "독립 출판 · 칼럼/에세이 기고 · 창작 협업",
+    "Independent publishing, writing, and creative collaboration"
+  ],
+  "topicHello": [
+    "가벼운 안부 및 인사",
+    "A simple hello"
+  ],
+  "contactField": [
+    "성함 및 회신받으실 연락처 (이메일 또는 전화번호)",
+    "Your name and contact details (email or phone)"
+  ],
+  "contactPlaceholder": [
+    "예: 김민지 / 이메일 또는 전화번호",
+    "e.g. Alex / email address or phone number"
+  ],
+  "messageField": [
+    "전하고 싶은 말씀",
+    "Your message"
+  ],
+  "messagePlaceholder": [
+    "편지를 읽고 떠오른 생각이나 문의 사항을 편하게 적어 주세요.",
+    "Share a thought from the letter, a question, or anything you would like to say."
+  ],
+  "directPhone": [
+    "직통 연락처",
+    "Phone"
+  ],
+  "textAvailable": [
+    "(문자 수신 가능)",
+    "(Text messages welcome)"
+  ],
+  "email": [
+    "이메일",
+    "Email"
+  ],
+  "fallbackLabel": [
+    "아래 답장을 선택해 복사해 주세요.",
+    "Select and copy your reply below."
+  ],
+  "fallbackHelp": [
+    "복사 버튼을 누르거나, 선택된 글을 직접 복사해 주세요.",
+    "Use the copy button, or copy the selected text yourself."
+  ],
+  "copySelected": [
+    "선택한 답장 복사",
+    "Copy selected reply"
+  ],
+  "close": [
+    "닫기",
+    "Close"
+  ],
+  "copyFallback": [
+    "자동 복사가 되지 않았어요. 아래 답장을 선택해 복사해 주세요.",
+    "Automatic copying is unavailable. Please select and copy your reply below."
+  ],
+  "needContact": [
+    "성함과 회신받으실 연락처를 입력해 주세요.",
+    "Please enter your name and contact details."
+  ],
+  "needMessage": [
+    "전하고 싶은 말씀을 입력해 주세요.",
+    "Please enter your message."
+  ],
+  "copying": [
+    "답장 복사 중…",
+    "Copying reply…"
+  ],
+  "copyManual": [
+    "글이 선택되어 있어요. 복사 메뉴나 Ctrl+C로 복사해 주세요.",
+    "Your reply is selected. Use the copy menu or Ctrl+C (Cmd+C on Mac)."
+  ],
+  "emailCopied": [
+    "이메일 주소를 복사했어요.",
+    "Email address copied."
+  ],
+  "phoneCopied": [
+    "연락처를 복사했어요.",
+    "Phone number copied."
+  ],
+  "contactCopyFailed": [
+    "복사하지 못했어요. {value}",
+    "Could not copy. {value}"
+  ],
+  "pendingLink": [
+    "웹·SNS 주소는 디자인을 정한 뒤 연결할 예정입니다.",
+    "Website and social links will be added soon."
+  ],
+  "switchLanguage": [
+    "Switch to English",
+    "한국어로 전환"
+  ]
+}

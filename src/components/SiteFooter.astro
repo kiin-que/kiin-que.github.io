@@ -1,0 +1,5 @@
+---
+import { translate } from '../lib/i18n';
+const { lang, article = false } = Astro.props;
+---
+<footer class={article ? 'reading-site-footer' : 'letter-footer'}><p>© 2026 Ki In</p>{!article && <a href="#main" class="u-grow"><span>{translate(lang, 'top')}</span> <span aria-hidden="true">↑</span></a>}</footer>
