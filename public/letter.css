@@ -126,7 +126,7 @@
 .letter-thanks .shine { opacity: 0; transition: opacity .3s ease; }
 .letter-thanks.apricot-on .juice { opacity: 1; }
 .letter-thanks.apricot-on .shine { opacity: .75; }
-.letter-like-count { display: inline-flex; align-items: center; justify-content: center; width: 1ch; height: 24px; overflow: hidden; font-family: "Cormorant Garamond", "Gowun Batang", Georgia, serif; font-size: 20px; font-weight: 600; font-variant-numeric: lining-nums tabular-nums; line-height: 24px; }
+.letter-like-count { display: inline-flex; align-items: center; justify-content: center; min-width: 1ch; height: 24px; overflow: hidden; font-family: "Cormorant Garamond", "Gowun Batang", Georgia, serif; font-size: 20px; font-weight: 600; font-variant-numeric: lining-nums tabular-nums; line-height: 24px; }
 .letter-like-count .num-up { display: inline-block; animation: numUp .35s cubic-bezier(.2,.8,.2,1) both; }
 .letter-like-count .num-down { display: inline-block; animation: numDown .35s cubic-bezier(.2,.8,.2,1) both; }
 @keyframes numUp { from { opacity: 0; transform: translateY(70%); } to { opacity: 1; transform: none; } }

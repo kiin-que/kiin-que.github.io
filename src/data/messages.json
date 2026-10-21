@@ -77,13 +77,11 @@
     "Thank you for your support ^^"
   ],
   "likedStatus": [
-    "따뜻한 마음, 고맙습니다. 공감 수 1.",
-    "Thank you for the warm thought. Appreciation count: 1."
+    "따뜻한 마음, 고맙습니다. 공감 수 {count}.",
+    "Thank you for the warm thought. Appreciation count: {count}."
   ],
-  "unlikedStatus": [
-    "공감을 취소했어요. 공감 수 0.",
-    "Appreciation removed. Count: 0."
-  ],
+  "likeAlready": ["이미 응원해 주셨어요. 고맙습니다 ^^", "You have already cheered this letter on. Thank you ^^"],
+  "likeFailed": ["지금은 공감을 저장하지 못했어요. 잠시 후 다시 눌러 주세요.", "Could not save your appreciation right now. Please try again in a moment."],
   "filterLabel": [
     "물음표 분류",
     "Question categories"

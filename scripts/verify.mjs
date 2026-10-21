@@ -104,21 +104,37 @@ for (const name of pages) {
     window.sessionStorage = {getItem: key => stored.get(key) || null, setItem: (key, value) => stored.set(key, value)};
     window.location = {href: url};
     window.history = {state: null, replaceState: (_, __, next) => { window.location.href = String(next); }};
+    // The like counter web app is faked: the total starts at 41 and the press brings it to 42.
+    const liked = new Map();
+    window.localStorage = {getItem: key => liked.get(key) ?? null, setItem: (key, value) => liked.set(key, value)};
+    const requests = [];
+    const fakeFetch = async (url, options = {}) => {
+      requests.push(options.method);
+      return {ok: true, status: 200, json: async () => ({count: options.method === 'POST' ? 42 : 41})};
+    };
     vm.runInNewContext(fs.readFileSync(path.join(root, 'letter.js'), 'utf8'), {
       document, window, IntersectionObserver: Observer,
       matchMedia: () => ({matches: false, addEventListener() {}}),
-      navigator: {}, setTimeout, clearTimeout, URL,
+      navigator: {}, setTimeout, clearTimeout, URL, fetch: fakeFetch,
     });
+    const settle = () => new Promise(resolve => setTimeout(resolve, 0));
+    await settle();
     const thanks = document.querySelector('.letter-thanks');
+    const remote = Boolean(thanks.getAttribute('data-like-endpoint'));
+    const shownCount = () => document.querySelector('[data-like-count]').textContent;
     const press = node => node.dispatchEvent(new window.Event('click'));
-    for (let i = 1; i <= 10; i++) {
+    assert.equal(shownCount(), remote ? '41' : '0');
+    for (let i = 1; i <= 3; i++) {
       press(thanks);
-      assert.equal(thanks.getAttribute('aria-pressed'), String(i % 2 === 1));
-      assert.equal(document.querySelector('[data-like-count]').textContent, String(i % 2));
-      assert.equal(thanks.querySelector('[data-i18n]').textContent, messages[i % 2 ? 'likeThanks' : 'like']);
-      assert.equal(thanks.classList.contains('apricot-on'), i % 2 === 1);
-      assert.equal(thanks.querySelector('[data-like-count] span').className, i % 2 ? 'num-up' : 'num-down');
+      await settle();
+      assert.equal(thanks.getAttribute('aria-pressed'), 'true', 'Likes cannot be undone');
+      assert.equal(thanks.classList.contains('apricot-on'), true);
+      assert.equal(thanks.querySelector('[data-i18n]').textContent, messages.likeThanks);
+      assert.equal(shownCount(), remote ? '42' : '1');
     }
+    assert.deepEqual(requests, remote ? ['GET', 'POST'] : []);
+    assert.equal(liked.get('kiin-letter-liked'), '1');
+    assert.equal(document.querySelector('#letter-toast').textContent, messages.likeAlready);
     for (const category of ['language', 'experiment', 'thought', 'all']) {
       const button = document.querySelector('[data-writing-filter="' + category + '"]');
       press(button);
@@ -150,4 +166,4 @@ const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
 assert.equal((sitemap.match(/<loc>/g) || []).length, pages.length);
 assert.ok(!sitemap.includes('?lang='));
 assert.ok(fs.readFileSync(path.join(root, 'robots.txt'), 'utf8').includes(origin + base + 'sitemap.xml'));
-console.log('Verified ' + pages.length + ' bilingual pages (' + notes.size + ' note(s), ' + works.size + ' image work(s)), ' + checked + ' local links/assets, artwork metadata, untitled fallback, category counts/restoration, likes and scroll reveals.');
+console.log('Verified ' + pages.length + ' bilingual pages (' + notes.size + ' note(s), ' + works.size + ' image work(s)), ' + checked + ' local links/assets, artwork metadata, untitled fallback, category counts/restoration, one-way likes with the counter, and scroll reveals.');

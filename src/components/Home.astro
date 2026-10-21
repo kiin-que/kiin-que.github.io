@@ -4,6 +4,7 @@ import WritingList from './WritingList.astro';
 import { getWorks } from '../data/works';
 import Greeting from './Greeting.astro';
 import { translate, withBase } from '../lib/i18n';
+import { LIKE_ENDPOINT } from '../data/counter';
 const { lang } = Astro.props;
 const t = (key: string) => translate(lang, key);
 const publishedWorks = await getWorks(lang);
@@ -25,7 +26,7 @@ const countWorks = (category: string) => publishedWorks.filter(work => category 
         <p data-i18n="letter3">{t("letter3")}</p>
         <p data-i18n="letter4">{t("letter4")}</p>
       </div>
-        <button type="button" class="letter-thanks" aria-pressed="false">
+        <button type="button" class="letter-thanks" aria-pressed="false" data-like-endpoint={LIKE_ENDPOINT || undefined}>
           <svg class="apricot-icon" width="30" height="30" viewBox="0 0 28 28" aria-hidden="true">
             <path d="M14 8.2C17.6 5.6 24.6 7.4 24.6 15C24.6 21.6 19.6 25.6 14 25.6C8.4 25.6 3.4 21.6 3.4 15C3.4 7.4 10.4 5.6 14 8.2Z" fill="#FDF9F3" />
             <path class="juice" d="M14 8.2C17.6 5.6 24.6 7.4 24.6 15C24.6 21.6 19.6 25.6 14 25.6C8.4 25.6 3.4 21.6 3.4 15C3.4 7.4 10.4 5.6 14 8.2Z" fill="#E3A07A" />
@@ -36,7 +37,7 @@ const countWorks = (category: string) => publishedWorks.filter(work => category 
             <path d="M15.1 4.9C17 2.6 20.6 2.4 22.6 3.8C21 6.2 17.6 6.8 15.1 4.9Z" fill="#FDF9F3" stroke="#3B2B23" stroke-width="1.1" stroke-linejoin="round" />
           </svg>
           <span class="u-grow" data-i18n="like">{t("like")}</span>
-          <span class="letter-like-count" data-like-count=""><span>0</span></span>
+          <span class="letter-like-count" data-like-count=""><span>{LIKE_ENDPOINT ? '' : '0'}</span></span>
         </button>
         <p class="sr-only" id="thanks-status" role="status"></p>
     </section>

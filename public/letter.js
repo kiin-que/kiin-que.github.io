@@ -13,28 +13,62 @@
     notify(await copy(value)?t(email ? 'emailCopied' : 'phoneCopied') : t('contactCopyFailed', { value }));
   }));
   document.querySelectorAll('[data-pending-link]').forEach(button=>button.addEventListener('click',()=>notify(t('pendingLink'))));
+  // "편지 잘 읽었어요": one press per browser, no undo. The total lives in the like-counter web app
+  // (data-like-endpoint); without an endpoint the button only counts this visit.
   const thanks=document.querySelector('.letter-thanks');
+  const endpoint = thanks.dataset.likeEndpoint || '';
+  const LIKED_KEY = 'kiin-letter-liked';
+  const stored = (() => { try { return window.localStorage; } catch { return null; } })();
   let liked = false;
-  let count = 0;
-  const updateLikeLabel = () => {
-    const label = thanks.querySelector('[data-i18n]');
-    const key = liked ? 'likeThanks' : 'like';
-    label.setAttribute('data-i18n', key);
-    label.textContent = t(key);
-  };
-  thanks.addEventListener('click', () => {
-    liked = !liked;
-    count += liked ? 1 : -1;
-    thanks.setAttribute('aria-pressed', String(liked));
-    thanks.classList.toggle('apricot-on', liked);
-    updateLikeLabel();
+  let pending = false;
+  let count = endpoint ? null : 0;
+  const showCount = (animate) => {
     const number = document.createElement('span');
-    number.textContent = String(count);
-    number.className = liked ? 'num-up' : 'num-down';
+    number.textContent = count === null ? '' : String(count);
+    if (animate) number.className = 'num-up';
     thanks.querySelector('[data-like-count]').replaceChildren(number);
-    document.querySelector('#thanks-status').textContent = liked
-      ? t('likedStatus')
-      : t('unlikedStatus');
+  };
+  const showLiked = () => {
+    thanks.setAttribute('aria-pressed', 'true');
+    thanks.classList.add('apricot-on');
+    const label = thanks.querySelector('[data-i18n]');
+    label.setAttribute('data-i18n', 'likeThanks');
+    label.textContent = t('likeThanks');
+  };
+  const request = async (method) => {
+    const response = await fetch(endpoint, { method, redirect: 'follow', ...(method === 'POST' ? { body: '{}', headers: { 'Content-Type': 'text/plain;charset=utf-8' } } : {}) });
+    const body = await response.json();
+    if (!response.ok || body.error || typeof body.count !== 'number') throw new Error(body.error || 'HTTP ' + response.status);
+    return body.count;
+  };
+  try { liked = stored?.getItem(LIKED_KEY) === '1'; } catch {}
+  if (liked) showLiked();
+  if (endpoint && typeof fetch === 'function') {
+    request('GET').then(total => { count = total; showCount(false); }).catch(() => {});
+  }
+  thanks.addEventListener('click', async () => {
+    if (liked) { notify(t('likeAlready')); return; }
+    if (pending) return;
+    pending = true;
+    liked = true;
+    showLiked();
+    if (count !== null) { count += 1; showCount(true); }
+    try {
+      if (endpoint && typeof fetch === 'function') { count = await request('POST'); showCount(count !== null); }
+      try { stored?.setItem(LIKED_KEY, '1'); } catch {}
+      document.querySelector('#thanks-status').textContent = t('likedStatus', { count: count ?? '' });
+    } catch {
+      liked = false;
+      thanks.setAttribute('aria-pressed', 'false');
+      thanks.classList.remove('apricot-on');
+      const label = thanks.querySelector('[data-i18n]');
+      label.setAttribute('data-i18n', 'like');
+      label.textContent = t('like');
+      if (count !== null) { count -= 1; showCount(false); }
+      notify(t('likeFailed'));
+    } finally {
+      pending = false;
+    }
   });
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
   let filterAnimation;
