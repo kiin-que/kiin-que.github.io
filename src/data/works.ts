@@ -1,27 +1,7 @@
+import { getCollection } from 'astro:content';
 import { getNotes } from './notes';
 import { translate } from '../lib/i18n';
 import type { Language } from '../lib/i18n';
-
-type ImageWork = {
-  slug: string;
-  category: 'language' | 'thought' | 'experiment';
-  created: string;
-  image: string;
-  width: number;
-  height: number;
-  tool: string;
-  title?: Partial<Record<Language, string>>;
-};
-
-export const imageWorks: ImageWork[] = [{
-  slug: 'gemini-2025-04',
-  category: 'experiment',
-  created: '2025-04',
-  image: 'images/Gemini_Generated_Image_1zprme1zprme1zpr.jpg',
-  width: 2048,
-  height: 2048,
-  tool: 'Gemini',
-}];
 
 export function formatWorkDate(date: string, lang: Language) {
   const [year, month, day] = date.split('-').map(Number);
@@ -29,26 +9,43 @@ export function formatWorkDate(date: string, lang: Language) {
   return new Intl.DateTimeFormat('en', {year: 'numeric', month: 'short', ...(day ? {day: 'numeric'} : {}), timeZone: 'UTC'}).format(new Date(Date.UTC(year, month - 1, day || 1)));
 }
 
+function formatMonth(date: string, lang: Language) {
+  const [year, month] = date.split('-').map(Number);
+  if (lang === 'ko') return year + '년 ' + month + '월';
+  return new Intl.DateTimeFormat('en', {year: 'numeric', month: 'long', timeZone: 'UTC'}).format(new Date(Date.UTC(year, month - 1, 1)));
+}
+
+const MIME: Record<string, string> = { jpg: 'image/jpeg', jpeg: 'image/jpeg', png: 'image/png', webp: 'image/webp', gif: 'image/gif', avif: 'image/avif' };
+
 // Only use titles supplied by the user. Untitled images share this fallback.
-export const imageWorkTitle = (work: ImageWork, lang: Language) => work.title?.[lang]?.trim() || translate(lang, 'untitled');
+export async function getImageWorks(lang: Language) {
+  const entries = await getCollection('works');
+  return entries
+    .map(({ data: work }) => {
+      const description = translate(lang, 'imageWorkDescription').replace('{tool}', work.tool);
+      return {
+        ...work,
+        image: 'media/works/' + work.image,
+        mime: MIME[work.image.split('.').pop()!.toLowerCase()] ?? 'image/jpeg',
+        title: (lang === 'en' ? work.title_en : work.title_ko).trim() || translate(lang, 'untitled'),
+        description,
+        dateLabel: formatWorkDate(work.created, lang),
+        credit: formatMonth(work.created, lang) + ' · ' + description,
+        alt: lang === 'en' ? work.alt_en : work.alt_ko,
+      };
+    })
+    .sort((a, b) => b.created.localeCompare(a.created));
+}
 
-export const getImageWorks = (lang: Language) => imageWorks.map(work => ({
-  ...work,
-  title: imageWorkTitle(work, lang),
-  description: translate(lang, 'imageWorkDescription').replace('{tool}', work.tool),
-  dateLabel: formatWorkDate(work.created, lang),
-  alt: translate(lang, 'archiveImageAlt'),
-}));
-
-export function getWorks(lang: Language) {
+export async function getWorks(lang: Language) {
   return [
-    ...getNotes(lang).map(note => ({
+    ...(await getNotes(lang)).map(note => ({
       slug: note.slug, type: 'note' as const, category: note.frontmatter.category,
       title: note.frontmatter.title, description: note.frontmatter.description,
       date: note.frontmatter.date, dateLabel: formatWorkDate(note.frontmatter.date, lang),
       path: 'writing/' + note.slug + '/', image: '', alt: '', width: 0, height: 0,
     })),
-    ...getImageWorks(lang).map(work => ({
+    ...(await getImageWorks(lang)).map(work => ({
       ...work, type: 'image' as const, date: work.created, path: 'works/' + work.slug + '/',
     })),
   ];

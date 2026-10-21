@@ -5,7 +5,7 @@ import { withBase, localPath, clientMessages } from '../lib/i18n';
 import type { Language } from '../lib/i18n';
 const {lang, title, description, article = false, slug = '', published, artwork} = Astro.props as {
   lang: Language; title: string; description: string; article?: boolean; slug?: string; published?: string;
-  artwork?: {image: string; created: string; tool: string};
+  artwork?: {image: string; created: string; tool: string; mime: string};
 };
 const detailSection = artwork ? 'works' : 'writing';
 const tail = article ? detailSection + '/' + slug + '/' : '';
@@ -15,7 +15,7 @@ const image = absolute(withBase(artwork ? artwork.image : 'assets/portrait-soft.
 const schema = artwork ? {
   '@context': 'https://schema.org', '@type': 'VisualArtwork', name: title.replace(/ · Ki In$/, ''), description,
   dateCreated: artwork.created, inLanguage: lang, url: canonical, image,
-  artMedium: 'AI-generated image (' + artwork.tool + ')', encodingFormat: 'image/jpeg',
+  artMedium: 'AI-generated image (' + artwork.tool + ')', encodingFormat: artwork.mime,
 } : article ? {
   '@context': 'https://schema.org', '@type': 'BlogPosting', headline: title, description,
   datePublished: published, inLanguage: lang, mainEntityOfPage: canonical, image,
