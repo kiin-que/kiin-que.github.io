@@ -146,6 +146,9 @@
 .life-journey h3 { font-family: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size: 20px; font-weight: 400; line-height: 1.7; letter-spacing: -.025em; }
 .life-journey li > div > p { margin-top: 9px; font-size: 17px; line-height: 1.9; }
 
+.archive-image { width: min(100%, 560px); margin: 64px auto 0; }
+.archive-image img { display: block; width: 100%; height: auto; }
+.archive-image figcaption { margin-top: 14px; color: var(--muted); font-size: 14px; line-height: 1.8; text-align: center; text-wrap: balance; }
 .connect-section { width: min(calc(100% - 48px), 680px); margin: 96px auto 0; text-align: center; }
 .connect-section .section-heading { margin-bottom: 0; }
 .connect-note { margin-top: 20px; color: var(--muted); font-size: 17px; line-height: 1.85; }

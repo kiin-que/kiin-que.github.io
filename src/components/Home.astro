@@ -52,6 +52,10 @@ const countNotes = (category: string) => publishedNotes.filter(note => category 
       </div>
       <WritingList lang={lang} />
       <p class="writing-empty" role="status" hidden data-i18n="empty">{t("empty")}</p>
+      <figure class="archive-image">
+        <img src={withBase("images/Gemini_Generated_Image_1zprme1zprme1zpr.jpg")} width="2048" height="2048" alt={t("archiveImageAlt")} data-i18n-alt="archiveImageAlt" loading="lazy" decoding="async" />
+        <figcaption data-i18n="archiveImageCredit">{t("archiveImageCredit")}</figcaption>
+      </figure>
     </section>
 <section id="connect" class="connect-section" aria-labelledby="connect-title">
       <header class="section-heading"><h2 id="connect-title" data-i18n="connectTitle">{t("connectTitle")}</h2>
