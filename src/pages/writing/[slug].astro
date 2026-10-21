@@ -1,8 +1,8 @@
 ---
 import ReadingNote from '../../components/ReadingNote.astro';
 import { getNotes } from '../../data/notes';
-export function getStaticPaths() {
-  return getNotes('ko').map(note => ({ params: { slug: note.slug }, props: { note } }));
+export async function getStaticPaths() {
+  return (await getNotes('ko')).map(note => ({ params: { slug: note.slug }, props: { note } }));
 }
 const { note } = Astro.props;
 ---

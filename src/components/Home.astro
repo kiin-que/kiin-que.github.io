@@ -6,7 +6,7 @@ import Greeting from './Greeting.astro';
 import { translate, withBase } from '../lib/i18n';
 const { lang } = Astro.props;
 const t = (key: string) => translate(lang, key);
-const publishedWorks = getWorks(lang);
+const publishedWorks = await getWorks(lang);
 const filters = ['all', 'language', 'thought', 'experiment'];
 const countWorks = (category: string) => publishedWorks.filter(work => category === 'all' || work.category === category).length;
 ---

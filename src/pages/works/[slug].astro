@@ -1,8 +1,8 @@
 ---
 import ImageWork from '../../components/ImageWork.astro';
 import { getImageWorks } from '../../data/works';
-export function getStaticPaths() {
-  return getImageWorks('ko').map(work => ({params: {slug: work.slug}, props: {work}}));
+export async function getStaticPaths() {
+  return (await getImageWorks('ko')).map(work => ({params: {slug: work.slug}, props: {work}}));
 }
 const {work} = Astro.props;
 ---

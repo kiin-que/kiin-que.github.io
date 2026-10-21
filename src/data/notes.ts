@@ -1,5 +1,9 @@
-import * as ko from '../content/notes/gregoire-sweet-orange-tree.ko.md';
-import * as en from '../content/notes/gregoire-sweet-orange-tree.en.md';
+import { getCollection } from 'astro:content';
 import type { Language } from '../lib/i18n';
-export const notes = [ { slug: 'gregoire-sweet-orange-tree', ko, en } ];
-export const getNotes = (lang: Language) => notes.map(note => ({ slug: note.slug, ...note[lang] }));
+
+export async function getNotes(lang: Language) {
+  const entries = await getCollection('notes', entry => entry.data.lang === lang);
+  return entries
+    .map(entry => ({ slug: entry.data.slug, frontmatter: entry.data, entry }))
+    .sort((a, b) => b.frontmatter.date.localeCompare(a.frontmatter.date));
+}

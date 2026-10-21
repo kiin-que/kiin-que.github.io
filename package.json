@@ -8,8 +8,9 @@
   },
   "packageManager": "pnpm@11.25.0",
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
+    "fetch": "node scripts/fetch-publish.mjs",
+    "dev": "node scripts/fetch-publish.mjs && astro dev",
+    "build": "node scripts/fetch-publish.mjs && astro build",
     "preview": "astro preview",
     "verify": "node scripts/verify.mjs"
   },

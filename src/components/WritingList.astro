@@ -3,9 +3,10 @@ import { getWorks } from '../data/works';
 import { translate, localPath, withBase } from '../lib/i18n';
 const { lang } = Astro.props;
 const t = (key: string) => translate(lang, key);
+const works = await getWorks(lang);
 ---
 <ul class="writing-list" id="writing-list">
-{getWorks(lang).map(work => <li class:list={['writing-entry', {'writing-entry-image': work.type === 'image'}]} data-writing-category={work.category}>
+{works.map(work => <li class:list={['writing-entry', {'writing-entry-image': work.type === 'image'}]} data-writing-category={work.category}>
   <a class="writing-entry-link" href={localPath(lang, work.path)}>
     {work.type === 'image' && <img class="writing-thumbnail" src={withBase(work.image)} width={work.width} height={work.height} alt={work.alt} loading="lazy" decoding="async" />}
     <div class="writing-entry-text">

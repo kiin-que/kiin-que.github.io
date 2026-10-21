@@ -6,8 +6,15 @@ import { parseHTML } from 'linkedom';
 const root = path.resolve('dist');
 const origin = 'https://kiin-que.github.io';
 const base = '/';
-const slug = 'gregoire-sweet-orange-tree';
-const pages = ['index.html', 'en/index.html', 'writing/' + slug + '/index.html', 'en/writing/' + slug + '/index.html', 'works/gemini-2025-04/index.html', 'en/works/gemini-2025-04/index.html'];
+// Expectations come from the publish folder that fetch-publish.mjs copied for this build.
+const manifest = JSON.parse(fs.readFileSync(path.resolve('.publish/manifest.json'), 'utf8'));
+const notes = new Map(manifest.notes.map(note => [note.slug, note]));
+const works = new Map(manifest.works.map(work => [work.slug, work]));
+const entryCount = notes.size + works.size;
+const categoryCount = category => [...manifest.notes.map(note => note.ko.category), ...manifest.works.map(work => work.category)]
+  .filter(value => category === 'all' || value === category).length;
+const pages = ['index.html', 'en/index.html', ...[...notes.keys()].flatMap(slug => ['writing/' + slug + '/index.html', 'en/writing/' + slug + '/index.html']),
+  ...[...works.keys()].flatMap(slug => ['works/' + slug + '/index.html', 'en/works/' + slug + '/index.html'])];
 let checked = 0;
 function resource(url, from) {
   const target = new URL(url, from);
@@ -43,29 +50,40 @@ for (const name of pages) {
     const value = node.getAttribute('src') || node.getAttribute('href');
     if (value && !/^(mailto:|tel:|data:)/.test(value)) resource(value, url);
   }
+  const slug = tail.split('/')[1];
   if (imageWork) {
-    assert.equal(document.querySelector('h1').textContent, en ? 'Untitled' : '무제');
-    assert.equal(document.querySelector('time').getAttribute('datetime'), '2025-04');
-    assert.equal(document.querySelector('.image-work-figure figcaption').textContent, en ? 'April 2025 · Image generated with Gemini' : '2025년 4월 · Gemini로 생성한 이미지');
-    const image = document.querySelector('.image-work-figure img').getAttribute('src');
-    assert.equal(image, base + 'images/Gemini_Generated_Image_1zprme1zprme1zpr.jpg');
+    const work = works.get(slug);
+    const title = (en ? work.title_en : work.title_ko).trim() || (en ? 'Untitled' : '무제');
+    const tool = en ? 'Image generated with ' + work.tool : work.tool + '로 생성한 이미지';
+    assert.equal(document.querySelector('h1').textContent, title);
+    assert.equal(document.title, title + ' · Ki In');
+    assert.equal(document.querySelector('time').getAttribute('datetime'), work.created);
+    assert.ok(document.querySelector('.image-work-figure figcaption').textContent.endsWith(' · ' + tool));
+    const img = document.querySelector('.image-work-figure img');
+    const image = img.getAttribute('src');
+    assert.equal(image, base + 'media/works/' + work.image);
+    assert.equal(img.getAttribute('alt'), en ? work.alt_en : work.alt_ko);
     assert.equal(document.querySelector('meta[property="og:image"]').getAttribute('content'), origin + image);
     const artwork = JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);
     assert.equal(artwork['@type'], 'VisualArtwork');
-    assert.equal(artwork.dateCreated, '2025-04');
-    assert.equal(artwork.name, en ? 'Untitled' : '무제');
+    assert.equal(artwork.dateCreated, work.created);
+    assert.equal(artwork.name, title);
   } else if (article) {
-    assert.equal(document.querySelectorAll('.reading-body p').length, 4);
-    assert.ok(document.querySelector('.reading-credits').textContent.includes('2025'));
-    assert.ok(document.querySelector('.reading-body').textContent.includes(en ? 'These two books whisper' : '두 책은 인연과 맺어짐'));
+    const note = notes.get(slug)[en ? 'en' : 'ko'];
+    assert.equal(document.title, note.pageTitle);
+    assert.equal(document.querySelector('h1').textContent, note.heading);
+    assert.equal(document.querySelector('.reading-deck').textContent, note.description);
+    assert.equal(document.querySelector('time').getAttribute('datetime'), note.date);
+    assert.ok(document.querySelectorAll('.reading-body p').length > 0, 'Empty note body: ' + name);
+    assert.equal(document.querySelector('.reading-credits')?.textContent ?? '', note.source ?? '');
   } else {
     assert.equal(document.querySelectorAll('.letter-body p').length, 6);
     assert.equal(document.querySelectorAll('.letter-body strong[lang="ko"]').length, en ? 2 : 0);
     assert.ok(document.querySelector('.letter-body').textContent.includes(en ? 'With the posture of a question mark' : '물음표를 닮은 자세'));
     assert.equal(document.querySelector('.letter-nav a[href="#connect"]').textContent.trim(), en ? 'Connect ↗' : '연결 ↗');
     const messages = JSON.parse(document.querySelector('#page-translations').textContent);
-    assert.equal(document.querySelectorAll('.writing-entry').length, 2);
-    assert.equal(document.querySelector('.writing-entry-image .writing-title').textContent, en ? 'Untitled' : '무제');
+    assert.equal(document.querySelectorAll('.writing-entry').length, entryCount);
+    for (const entry of document.querySelectorAll('.writing-entry')) assert.ok(entry.querySelector('.writing-title').textContent.trim(), 'Untitled list entry');
     assert.equal(document.querySelectorAll('.archive-image').length, 0);
     for (const node of document.querySelectorAll('[data-i18n]')) {
       const key = node.getAttribute('data-i18n');
@@ -104,18 +122,20 @@ for (const name of pages) {
       const button = document.querySelector('[data-writing-filter="' + category + '"]');
       press(button);
       const entries = [...document.querySelectorAll('.writing-entry')];
-      const expectedCount = category === 'all' ? 2 : category === 'language' ? 0 : 1;
+      const expectedCount = categoryCount(category);
       assert.equal(entries.filter(entry => !entry.hidden).length, expectedCount);
       for (const entry of entries) assert.equal(entry.hidden, category !== 'all' && entry.dataset.writingCategory !== category);
       assert.equal(parseInt(button.querySelector('.writing-filter-count').textContent, 10), expectedCount);
       assert.equal(document.querySelector('.writing-empty').hidden, expectedCount > 0);
       assert.equal(button.getAttribute('aria-pressed'), 'true');
     }
-    stored.set('kiin-writing-category', 'experiment');
-    window.dispatchEvent(new window.Event('pageshow'));
-    assert.equal(document.querySelector('[data-writing-filter="experiment"]').getAttribute('aria-pressed'), 'true');
-    assert.equal(document.querySelector('.writing-entry-image').hidden, false);
-    assert.equal(document.querySelector('.writing-entry:not(.writing-entry-image)').hidden, true);
+    const restored = ['language', 'thought', 'experiment'].find(category => categoryCount(category) > 0);
+    if (restored) {
+      stored.set('kiin-writing-category', restored);
+      window.dispatchEvent(new window.Event('pageshow'));
+      assert.equal(document.querySelector('[data-writing-filter="' + restored + '"]').getAttribute('aria-pressed'), 'true');
+      for (const entry of document.querySelectorAll('.writing-entry')) assert.equal(entry.hidden, entry.dataset.writingCategory !== restored);
+    }
     assert.equal(document.querySelectorAll('.scroll-line').length, 2);
     observers[0].callback(observed.slice(0, 3).map(target => ({target, isIntersecting: true})));
     assert.equal(document.querySelectorAll('.scroll-reveal:not(.is-visible)').length, 0);
@@ -126,7 +146,7 @@ for (const file of ['common.css', 'letter.css', 'reading.css', 'language.css']) 
   for (const match of css.matchAll(/url\(['"]?([^'"\)]+)['"]?\)/g)) resource(match[1], origin + base + file);
 }
 const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
-assert.equal((sitemap.match(/<loc>/g) || []).length, 6);
+assert.equal((sitemap.match(/<loc>/g) || []).length, pages.length);
 assert.ok(!sitemap.includes('?lang='));
 assert.ok(fs.readFileSync(path.join(root, 'robots.txt'), 'utf8').includes(origin + base + 'sitemap.xml'));
-console.log('Verified 6 bilingual pages, ' + checked + ' local links/assets, artwork metadata, untitled fallback, category counts/restoration, likes and scroll reveals.');
+console.log('Verified ' + pages.length + ' bilingual pages (' + notes.size + ' note(s), ' + works.size + ' image work(s)), ' + checked + ' local links/assets, artwork metadata, untitled fallback, category counts/restoration, likes and scroll reveals.');

@@ -16,7 +16,7 @@ const back = localPath(lang) + '#writing';
       </header>
       <figure class="image-work-figure">
         <img src={withBase(work.image)} width={work.width} height={work.height} alt={work.alt} decoding="async" fetchpriority="high" />
-        <figcaption>{t('archiveImageCredit')}</figcaption>
+        <figcaption>{work.credit}</figcaption>
       </figure>
       <div class="image-work-original"><a class="reading-back u-grow" href={withBase(work.image)} target="_blank" rel="noopener">{t('viewOriginalImage')} ↗</a></div>
     </article>
