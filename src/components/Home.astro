@@ -1,14 +1,14 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import WritingList from './WritingList.astro';
-import { getNotes } from '../data/notes';
+import { getWorks } from '../data/works';
 import Greeting from './Greeting.astro';
 import { translate, withBase } from '../lib/i18n';
 const { lang } = Astro.props;
 const t = (key: string) => translate(lang, key);
-const publishedNotes = getNotes(lang);
+const publishedWorks = getWorks(lang);
 const filters = ['all', 'language', 'thought', 'experiment'];
-const countNotes = (category: string) => publishedNotes.filter(note => category === 'all' || note.frontmatter.category === category).length;
+const countWorks = (category: string) => publishedWorks.filter(work => category === 'all' || work.category === category).length;
 ---
 <PageLayout lang={lang} title={t('homeTitle')} description={t('homeDescription')}>
 <main id="main">
@@ -47,15 +47,11 @@ const countNotes = (category: string) => publishedNotes.filter(note => category 
       <div class="writing-filters" role="group" aria-label={t("filterLabel")} data-i18n-aria-label="filterLabel">
         {filters.map(category => <button type="button" class:list={['writing-filter', { 'u-on': category === 'all' }]} data-writing-filter={category} aria-pressed={category === 'all' ? 'true' : 'false'} aria-controls="writing-list">
           <svg class="writing-filter-shape" viewBox="0 0 120 60" preserveAspectRatio="none" aria-hidden="true" focusable="false"><path vector-effect="non-scaling-stroke" d="M22 0.75H98C109.74 0.75 119.25 10.26 119.25 22S109.74 43.25 98 43.25H75C72.8 43.25 71 45.05 71 47.25V48.25C71 54.33 66.08 59.25 60 59.25S49 54.33 49 48.25V47.25C49 45.05 47.2 43.25 45 43.25H22C10.26 43.25 0.75 33.74 0.75 22S10.26 0.75 22 0.75Z" /></svg><span class="writing-filter-label" data-i18n={category}>{t(category)}</span>
-          <span class="writing-filter-count">{countNotes(category)}<span class="sr-only">{lang === 'en' ? ' published works' : '개의 공개 작업'}</span></span>
+          <span class="writing-filter-count">{countWorks(category)}<span class="sr-only">{lang === 'en' ? ' published works' : '개의 공개 작업'}</span></span>
         </button>)}
       </div>
       <WritingList lang={lang} />
       <p class="writing-empty" role="status" hidden data-i18n="empty">{t("empty")}</p>
-      <figure class="archive-image">
-        <img src={withBase("images/Gemini_Generated_Image_1zprme1zprme1zpr.jpg")} width="2048" height="2048" alt={t("archiveImageAlt")} data-i18n-alt="archiveImageAlt" loading="lazy" decoding="async" />
-        <figcaption data-i18n="archiveImageCredit">{t("archiveImageCredit")}</figcaption>
-      </figure>
     </section>
 <section id="connect" class="connect-section" aria-labelledby="connect-title">
       <header class="section-heading"><h2 id="connect-title" data-i18n="connectTitle">{t("connectTitle")}</h2>

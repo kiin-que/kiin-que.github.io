@@ -41,11 +41,12 @@
   const filterButtons = [...document.querySelectorAll('[data-writing-filter]')];
   const writingEntries = [...document.querySelectorAll('[data-writing-category]')];
   const writingEmpty = document.querySelector('.writing-empty');
-  filterButtons.forEach(button => button.addEventListener('click', () => {
-    const selected = button.dataset.writingFilter;
+  function selectWritingFilter(selected, animate = false) {
+    if (!filterButtons.some(button => button.dataset.writingFilter === selected)) selected = 'all';
     filterButtons.forEach(filter => {
-      filter.setAttribute('aria-pressed', String(filter === button));
-      filter.classList.toggle('u-on', filter === button);
+      const active = filter.dataset.writingFilter === selected;
+      filter.setAttribute('aria-pressed', String(active));
+      filter.classList.toggle('u-on', active);
     });
     writingEntries.forEach(entry => {
       entry.hidden = selected !== 'all' && entry.dataset.writingCategory !== selected;
@@ -53,14 +54,34 @@
     if (writingEmpty) writingEmpty.hidden = writingEntries.some(entry => !entry.hidden);
     if (filterAnimation) filterAnimation.cancel();
     const result = writingEmpty && !writingEmpty.hidden ? writingEmpty : document.querySelector('.writing-list');
-    if (!reducedMotion.matches && result && typeof result.animate === 'function') {
+    if (animate && !reducedMotion.matches && result && typeof result.animate === 'function') {
       filterAnimation = result.animate([
         { opacity: 0, transform: 'translateY(3px)' },
         { opacity: 1, transform: 'translateY(0)' }
       ], { duration: 220, easing: 'cubic-bezier(.22,1,.36,1)' });
     }
 
+  }
+  function restoreWritingFilter() {
+    let selected = 'all';
+    try {
+      selected = new URL(window.location.href).searchParams.get('category') || window.sessionStorage.getItem('kiin-writing-category') || 'all';
+    } catch {}
+    selectWritingFilter(selected);
+  }
+  filterButtons.forEach(button => button.addEventListener('click', () => {
+    const selected = button.dataset.writingFilter;
+    selectWritingFilter(selected, true);
+    try {
+      window.sessionStorage.setItem('kiin-writing-category', selected);
+      const url = new URL(window.location.href);
+      if (selected === 'all') url.searchParams.delete('category');
+      else url.searchParams.set('category', selected);
+      window.history.replaceState(window.history.state, '', url);
+    } catch {}
   }));
+  restoreWritingFilter();
+  window.addEventListener('pageshow', restoreWritingFilter);
   if ('IntersectionObserver' in window && !reducedMotion.matches) {
     const scenes = [
       { root: document.querySelector('#letter'), selector: '.letter-body p, .letter-thanks' },

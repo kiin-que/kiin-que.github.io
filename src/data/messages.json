@@ -47,6 +47,11 @@
     "2025년 4월 · Gemini로 생성한 이미지",
     "April 2025 · Image generated with Gemini"
   ],
+  "untitled": ["무제", "Untitled"],
+  "imageWork": ["이미지 작업", "Image work"],
+  "viewWork": ["작업 보기", "View work"],
+  "imageWorkDescription": ["{tool}로 생성한 이미지", "Image generated with {tool}"],
+  "viewOriginalImage": ["원본 이미지 보기", "View original image"],
   "helloPeriod": [
     "안녕하세요.",
     "안녕하세요. (Hello.)"

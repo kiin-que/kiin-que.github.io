@@ -1,0 +1,25 @@
+---
+import PageLayout from '../layouts/PageLayout.astro';
+import { translate, localPath, withBase } from '../lib/i18n';
+const { lang, work } = Astro.props;
+const t = (key: string) => translate(lang, key);
+const back = localPath(lang) + '#writing';
+---
+<PageLayout lang={lang} title={work.title + ' · Ki In'} description={work.description} article slug={work.slug} artwork={work}>
+  <main id="main" class="reading-main image-work-main">
+    <a class="reading-back u-grow" href={back}>{t('backQuestions')}</a>
+    <article class="reading-article" aria-labelledby="image-work-title">
+      <header>
+        <p class="reading-meta"><span>{t('imageWork')}</span><time datetime={work.created}>{work.dateLabel}</time></p>
+        <h1 id="image-work-title">{work.title}</h1>
+        <p class="reading-deck">{work.description}</p>
+      </header>
+      <figure class="image-work-figure">
+        <img src={withBase(work.image)} width={work.width} height={work.height} alt={work.alt} decoding="async" fetchpriority="high" />
+        <figcaption>{t('archiveImageCredit')}</figcaption>
+      </figure>
+      <div class="image-work-original"><a class="reading-back u-grow" href={withBase(work.image)} target="_blank" rel="noopener">{t('viewOriginalImage')} ↗</a></div>
+    </article>
+    <nav class="reading-bottom" aria-label={t('readingNavigation')}><a href={back} class="u-grow">{t('backQuestions')}</a><a href="#main" class="reading-top u-grow">{t('shortTop')}</a></nav>
+  </main>
+</PageLayout>

@@ -1,0 +1,9 @@
+---
+import ImageWork from '../../../components/ImageWork.astro';
+import { getImageWorks } from '../../../data/works';
+export function getStaticPaths() {
+  return getImageWorks('en').map(work => ({params: {slug: work.slug}, props: {work}}));
+}
+const {work} = Astro.props;
+---
+<ImageWork lang="en" work={work} />
