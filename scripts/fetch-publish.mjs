@@ -92,10 +92,18 @@ for (const file of files) {
     if (!SLUG.test(slug)) throw new Error(file.path + ': name must be {slug}.md');
     const data = frontmatter(file.data.toString('utf8'), file.path);
     if (data.visibility === 'private') throw new Error(file.path + ': marked private');
-    need(data, ['slug', 'category', 'created', 'image', 'width', 'height', 'tool', 'alt_ko', 'alt_en'], file.path);
+    const kind = data.kind ?? 'image';
+    if (!['image', 'project'].includes(kind)) throw new Error(file.path + ': unknown work kind');
+    need(data, ['slug', 'category', 'image', 'width', 'height', 'alt_ko', 'alt_en'], file.path);
+    if (kind === 'image') need(data, ['created', 'tool'], file.path);
+    if (kind === 'project') {
+      need(data, ['title_ko', 'title_en', 'description_ko', 'description_en', 'overview_ko', 'overview_en', 'features_ko', 'features_en', 'external_url'], file.path);
+      for (const key of ['features_ko', 'features_en']) if (!Array.isArray(data[key]) || !data[key].length || data[key].some(value => typeof value !== 'string' || !value.trim())) throw new Error(file.path + ': invalid ' + key);
+      if (new URL(data.external_url).protocol !== 'https:') throw new Error(file.path + ': project link must use HTTPS');
+    }
     if (data.slug !== slug) throw new Error(file.path + ': slug must match the file name');
     if (!CATEGORIES.includes(data.category)) throw new Error(file.path + ': unknown category "' + data.category + '"');
-    if (!DATE.test(data.created)) throw new Error(file.path + ': created must be YYYY-MM-DD or YYYY-MM');
+    if (data.created && !DATE.test(data.created)) throw new Error(file.path + ': created must be YYYY-MM-DD or YYYY-MM');
     if (!Number.isInteger(data.width) || !Number.isInteger(data.height)) throw new Error(file.path + ': width and height must be numbers');
     if (!images.has(data.image)) throw new Error(file.path + ': image "' + data.image + '" is not in works/');
     works.push(data);
@@ -127,4 +135,4 @@ fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify({
   notes: [...notes].map(([slug, entry]) => ({ slug, ko: entry.ko.data, en: entry.en.data })),
   works,
 }, null, 2));
-console.log('fetch-publish: ' + notes.size + ' note(s), ' + works.length + ' image work(s) from ' + (process.env.PUBLISH_URL ? 'Apps Script' : process.env.PUBLISH_DIR));
+console.log('fetch-publish: ' + notes.size + ' note(s), ' + works.length + ' visual work(s) from ' + (process.env.PUBLISH_URL ? 'Apps Script' : process.env.PUBLISH_DIR));

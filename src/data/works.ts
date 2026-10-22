@@ -19,7 +19,7 @@ const MIME: Record<string, string> = { jpg: 'image/jpeg', jpeg: 'image/jpeg', pn
 
 // Only use titles supplied by the user. Untitled images share this fallback.
 export async function getImageWorks(lang: Language) {
-  const entries = await getCollection('works');
+  const entries = await getCollection('works', entry => entry.data.kind === 'image');
   return entries
     .map(({ data: work }) => {
       const description = translate(lang, 'imageWorkDescription').replace('{tool}', work.tool);
@@ -37,8 +37,27 @@ export async function getImageWorks(lang: Language) {
     .sort((a, b) => b.created.localeCompare(a.created));
 }
 
+export async function getProjectWorks(lang: Language) {
+  const entries = await getCollection('works', entry => entry.data.kind === 'project');
+  return entries.map(({data: work}) => ({
+    ...work,
+    image: 'media/works/' + work.image,
+    title: lang === 'en' ? work.title_en : work.title_ko,
+    description: lang === 'en' ? work.description_en : work.description_ko,
+    overview: lang === 'en' ? work.overview_en : work.overview_ko,
+    features: lang === 'en' ? work.features_en : work.features_ko,
+    alt: lang === 'en' ? work.alt_en : work.alt_ko,
+    dateLabel: work.created ? formatWorkDate(work.created, lang) : '',
+  }));
+}
+
+export async function getDetailedWorks(lang: Language) {
+  return [...await getProjectWorks(lang), ...await getImageWorks(lang)];
+}
+
 export async function getWorks(lang: Language) {
   return [
+    ...(await getProjectWorks(lang)).map(work => ({ ...work, type: 'project' as const, label: 'projectWork', date: work.created, path: 'works/' + work.slug + '/' })),
     ...(await getNotes(lang)).map(note => ({
       slug: note.slug, type: 'note' as const, label: note.frontmatter.kind === 'letter' ? 'letterNote' : 'readingNote', category: note.frontmatter.category,
       title: note.frontmatter.title, description: note.frontmatter.description,

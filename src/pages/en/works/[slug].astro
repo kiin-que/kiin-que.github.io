@@ -1,9 +1,10 @@
 ---
+import ProjectWork from '../../../components/ProjectWork.astro';
 import ImageWork from '../../../components/ImageWork.astro';
-import { getImageWorks } from '../../../data/works';
+import { getDetailedWorks } from '../../../data/works';
 export async function getStaticPaths() {
-  return (await getImageWorks('en')).map(work => ({params: {slug: work.slug}, props: {work}}));
+  return (await getDetailedWorks('en')).map(work => ({params: {slug: work.slug}, props: {work}}));
 }
 const {work} = Astro.props;
 ---
-<ImageWork lang="en" work={work} />
+{work.kind === 'project' ? <ProjectWork lang="en" work={work} /> : <ImageWork lang="en" work={work} />}

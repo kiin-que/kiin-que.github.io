@@ -1,26 +1,12 @@
 ---
-import PageLayout from '../layouts/PageLayout.astro';
+import DetailPage from '../layouts/DetailPage.astro';
 import { render } from 'astro:content';
-import { translate, localPath } from '../lib/i18n';
+import { translate } from '../lib/i18n';
 import { formatWorkDate } from '../data/works';
 const { lang, note } = Astro.props;
 const { frontmatter: meta, entry } = note;
 const { Content } = await render(entry);
-const t = (key: string) => translate(lang, key);
-const home = localPath(lang);
 ---
-<PageLayout lang={lang} title={meta.pageTitle} description={meta.description} article slug={note.slug} published={meta.date}>
-<main id="main" class="reading-main">
-  <a class="reading-back u-grow" href={home + '#writing'}>{t('backList')}</a>
-  <article class="reading-article" aria-labelledby="reading-title">
-    <header>
-      <p class="reading-meta"><span>{t(meta.kind === 'letter' ? 'letterNote' : 'readingNote')}</span><time datetime={meta.date}>{formatWorkDate(meta.date, lang)}</time></p>
-      <h1 id="reading-title">{meta.heading}</h1>
-      <p class="reading-deck">{meta.description}</p>
-    </header>
-    <div class="reading-body"><Content /></div>
-    {meta.source && <footer class="reading-credits"><p>{meta.source}</p></footer>}
-  </article>
-  <nav class="reading-bottom" aria-label={t('readingNavigation')}><a href={home + '#writing'} class="u-grow">{t('backQuestions')}</a><a href="#main" class="reading-top u-grow">{t('shortTop')}</a></nav>
-</main>
-</PageLayout>
+<DetailPage lang={lang} type="text" slug={note.slug} title={meta.heading} pageTitle={meta.pageTitle} description={meta.description} label={translate(lang, meta.kind === 'letter' ? 'letterNote' : 'readingNote')} date={meta.date} dateLabel={formatWorkDate(meta.date, lang)} published={meta.date} source={meta.source}>
+  <Content />
+</DetailPage>
