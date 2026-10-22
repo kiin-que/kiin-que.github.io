@@ -44,5 +44,5 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:2px solid curre
 .letter-nav .u-pad, .reading-nav .u-pad { padding-inline: 10px; }
 .letter-thanks > .u-grow, .contact-label.u-grow { display: inline-block; --u-bottom: -2px; }
 .letter-thanks:is(:hover, :focus-visible) > .u-grow::after,
-.contact-link:is(:hover, :focus-visible) .u-grow::after { clip-path: inset(0 0 0 0); }
+.contact-link:is(:hover, :focus-visible) > span > .contact-label.u-grow::after { clip-path: inset(0 0 0 0); }
 @media (prefers-reduced-motion: reduce) { .u-grow::after { transition: none; } }

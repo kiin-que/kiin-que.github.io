@@ -3,18 +3,13 @@
 .writing-meta > span { display: inline-block; padding: 1px 8px; background: var(--sky); color: var(--ink); }
 
 .writing-section { width: min(calc(100% - 48px), 780px); margin: 96px auto 0; }
-.writing-list { list-style: none; margin: 0; padding: 0; }
+.writing-list { display: grid; grid-auto-rows: 1fr; gap: 20px; list-style: none; margin: 0; padding: 0; }
 .writing-entry { margin: 0; padding: 0; }
-.writing-entry + .writing-entry { margin-top: 38px; }
-.writing-entry-link { display: block; width: calc(100% + 32px); margin-inline: -16px; padding: 18px 16px; border-radius: 16px; background: transparent; color: var(--ink); text-align: left; text-decoration: none; transition: background-color 300ms ease; }
-.writing-title { margin: 13px 0 0; font-family: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size: 20px; font-weight: 400; line-height: 1.6; letter-spacing: -.01em; word-break: keep-all; overflow-wrap: anywhere; transition: color 300ms ease; }
-.writing-excerpt { margin: 11px 0 0; color: var(--muted); font-size: 17px; line-height: 1.85; }
-.writing-read { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 10px; color: var(--muted); font-size: 14px; line-height: 1.7; }
-.writing-entry-image .writing-entry-link { display: grid; grid-template-columns: 196px minmax(0, 1fr); align-items: center; gap: 28px; }
+.writing-entry-link { display: grid; align-items: center; width: calc(100% + 32px); height: 100%; min-height: 112px; margin-inline: -16px; padding: 20px 16px; border-radius: 16px; background: transparent; color: var(--ink); text-align: left; text-decoration: none; transition: background-color 300ms ease; }
+.writing-title { margin: 13px 0 0; font-family: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size: 18px; font-weight: 400; line-height: 1.6; letter-spacing: -.01em; word-break: keep-all; overflow-wrap: anywhere; transition: color 300ms ease; }
+.writing-entry-image .writing-entry-link { grid-template-columns: 80px minmax(0, 1fr); gap: 24px; }
 .writing-thumbnail { display: block; width: 100%; aspect-ratio: 1; height: auto; object-fit: contain; }
 .writing-entry-text { min-width: 0; }
-.writing-read > .u-grow { --u-bottom: -2px; }
-.writing-entry-link:is(:hover, :focus-visible) .writing-read > .u-grow::after { clip-path: inset(0 0 0 0); }
 
 @media (hover: hover) and (pointer: fine) {
   .writing-entry-link:hover { background-color: rgba(238, 220, 200, .6); }
@@ -22,13 +17,8 @@
 }
 @media (max-width: 540px) {
   .writing-section { margin-top: 82px; }
-  .writing-title { margin-top: 12px; font-size: 20px; line-height: 1.65; }
-  .writing-excerpt { margin-top: 10px; }
-  .writing-entry-image .writing-entry-link { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  .writing-entry-image .writing-thumbnail { width: min(100%, 240px); justify-self: center; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .writing-read { transition: none; }
+  .writing-title { margin-top: 12px; font-size: 18px; line-height: 1.65; }
+  .writing-entry-image .writing-entry-link { grid-template-columns: 72px minmax(0, 1fr); gap: 18px; }
 }
 
 .writing-filters { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 0 auto 32px; }

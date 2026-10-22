@@ -12,8 +12,6 @@ const works = await getWorks(lang);
     <div class="writing-entry-text">
       <p class="writing-meta"><span>{t(work.label)}</span>{work.date && <time datetime={work.date}>{work.dateLabel}</time>}</p>
       <h3 class="writing-title">{work.title}</h3>
-      <p class="writing-excerpt">{work.description}</p>
-      <span class="writing-read"><span class="u-grow">{t(work.type === 'note' ? 'read' : 'viewWork')}</span> <span aria-hidden="true">→</span></span>
     </div>
   </a>
 </li>)}
