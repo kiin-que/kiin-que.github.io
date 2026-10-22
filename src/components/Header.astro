@@ -12,7 +12,7 @@ const languageHref = localPath(other, article ? detailSection + '/' + slug + '/'
   <nav class={article ? 'reading-nav' : 'letter-nav'} aria-label={t('navLabel')}>
     <a href={article ? home : '#letter'} class="u-grow u-pad">{t(article ? 'about' : 'letter')}</a>
     <a href={article ? home + '#writing' : '#writing'} class:list={['u-grow', 'u-pad', {'u-on': article}]} aria-current={article ? 'true' : undefined}>{t('questions')}</a>
-    {!article && <a href="#connect" class="u-grow u-pad">{t('connect')} <span aria-hidden="true">↗</span></a>}
+    {!article && <a href="#connect" class="u-grow u-pad" data-open-contact aria-haspopup="dialog" aria-controls="contact-drawer" aria-expanded="false">{t('connect')} <span aria-hidden="true">↗</span></a>}
     <a href={languageHref} class="lang-btn u-grow u-pad" data-language-link lang={other} hreflang={other} aria-label={t('switchLanguage')}>{lang === 'ko' ? 'English' : '한국어'}</a>
   </nav>
 </header>

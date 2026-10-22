@@ -131,6 +131,9 @@
     "웹페이지",
     "Website"
   ],
+  "careerActivities": ["경력과 활동", "Experience & activities"],
+  "copyContact": ["복사", "Copy"],
+  "phoneCopy": ["연락처 복사", "Copy phone number"],
   "emailCopy": [
     "이메일 복사",
     "Copy email"

@@ -1,0 +1,14 @@
+---
+import ContactLinks from './ContactLinks.astro';
+import { translate } from '../lib/i18n';
+const {lang} = Astro.props;
+const t = (key: string) => translate(lang, key);
+---
+<dialog id="contact-drawer" class="contact-drawer" aria-labelledby="contact-drawer-title">
+  <div class="contact-drawer-header">
+    <h2 id="contact-drawer-title">{t('connect')}</h2>
+    <button type="button" class="contact-drawer-close" data-close-contact aria-label={t('close')} autofocus><span aria-hidden="true">×</span></button>
+  </div>
+  <ContactLinks lang={lang} variant="drawer" />
+  <p class="contact-drawer-status" data-contact-status role="status" hidden></p>
+</dialog>

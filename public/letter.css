@@ -154,7 +154,35 @@
 .contact-link > svg { grid-column: 1; grid-row: 1 / span 2; width: 25px; height: 25px; }
 .contact-link > span { grid-column: 2; font-size: 17px; line-height: 1.6; }
 .contact-link > small { grid-column: 2; margin-top: 2px; color: var(--muted); font-size: 14px; line-height: 1.7; overflow-wrap: anywhere; }
-.contact-link > span small { display:block; margin-top:2px; color:var(--muted); font-size:14px; line-height:1.7; }
+.contact-link > span small { display:block; margin-top:2px; color:var(--muted); font-size:14px; line-height:1.7; overflow-wrap:anywhere; }
+.contact-social { align-items: center; }
+.contact-social-body { grid-column: 2; min-width: 0; }
+.contact-social-body > small { display: block; margin-top: 2px; color: var(--muted); font-size: 14px; line-height: 1.7; }
+.contact-social-links { display: flex; flex-wrap: wrap; align-items: center; gap: 0 7px; line-height: 1.6; }
+.contact-social-links a { display: inline-flex; align-items: center; font-size: 17px; line-height: 1.6; }
+.contact-social-links a::before { content: ""; position: absolute; inset: -9px 0; }
+.contact-social-links a.contact-label { --u-bottom: -2px; }
+.connect-section .contact-link { align-items: stretch; }
+.connect-section .contact-link > svg { grid-row: 1; align-self: center; }
+.connect-section .contact-link > span,
+.connect-section .contact-social-body { display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between; min-width: 0; }
+.contact-drawer { position: fixed; inset: 0 0 0 auto; width: min(280px, 100%); max-width: 100%; height: 100%; height: 100dvh; max-height: 100%; margin: 0; padding: 28px 24px; padding-bottom: max(28px, env(safe-area-inset-bottom)); border: 0; background: var(--paper); color: var(--ink); font: inherit; overflow-y: auto; overscroll-behavior: contain; }
+.contact-drawer::backdrop { background: rgb(35 26 20 / .28); }
+.contact-drawer[open] { animation: contact-drawer-in 280ms cubic-bezier(.22,1,.36,1) both; }
+.contact-drawer-header { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.contact-drawer-header h2 { margin: 0; font-family: "Diphylleia", "Batang", serif; font-weight: 400; font-size: 28px; line-height: 1.5; }
+.contact-drawer-close { display: inline-flex; flex: none; align-items: center; justify-content: center; width: 44px; height: 44px; margin-right: -10px; padding: 0; border: 0; background: transparent; font: inherit; font-size: 30px; line-height: 1; }
+.contact-drawer .contact-links { width: 100%; margin-top: 28px; grid-template-columns: minmax(0, 1fr); gap: 4px; }
+.contact-drawer .contact-link { grid-template-columns: 22px minmax(0, 1fr); min-height: 60px; padding: 10px 0; gap: 0 15px; }
+.contact-drawer .contact-link > svg { grid-row: 1; width: 22px; height: 22px; }
+.contact-drawer .contact-label { font-size: 17px; }
+.contact-drawer .contact-label.u-grow::after { content: none; }
+.contact-drawer .contact-link:last-child:nth-child(odd) { width: 100%; justify-self: stretch; grid-column: auto; }
+.contact-drawer-status { margin: 24px 0 0; padding: 13px 16px; background: var(--surface); color: var(--ink); font-size: 14px; line-height: 1.7; }
+.contact-drawer-status[hidden] { display: none; }
+@keyframes contact-drawer-in { from { transform: translateX(100%); } to { transform: translateX(0); } }
+@media (max-width: 540px) { .contact-drawer { padding: 28px 24px; padding-bottom: max(28px, env(safe-area-inset-bottom)); } }
+@media (prefers-reduced-motion: reduce) { .contact-drawer[open] { animation: none; } }
 .only-small { display:none; }
 .letter-nav a[aria-current="location"] { text-decoration-color:var(--accent); }
 .letter-toast { position:fixed; z-index:90; bottom:24px; left:50%; transform:translateX(-50%); width:max-content; max-width:calc(100% - 32px); padding:13px 20px; background:var(--ink); color:var(--paper); font-size:14px; line-height:1.7; text-align:center; }

@@ -1,6 +1,8 @@
 ---
 import PageLayout from '../layouts/PageLayout.astro';
 import WritingList from './WritingList.astro';
+import ContactLinks from './ContactLinks.astro';
+import ContactDrawer from './ContactDrawer.astro';
 import { getWorks } from '../data/works';
 import Greeting from './Greeting.astro';
 import { translate, withBase } from '../lib/i18n';
@@ -58,12 +60,8 @@ const countWorks = (category: string) => publishedWorks.filter(work => category 
       <header class="section-heading"><h2 id="connect-title" data-i18n="connectTitle">{t("connectTitle")}</h2>
         <svg class="section-divider" viewBox="0 0 240 40" aria-hidden="true"><path d="M12 11C72 36 171 32 228 10" pathLength="1" /></svg>
       </header>
-      <div class="contact-links" aria-label={t("contactLabel")} data-i18n-aria-label="contactLabel">
-        <button type="button" class="contact-link" data-copy-contact="email"><svg class="icon" aria-hidden="true"><use href={withBase("assets/icons.svg#mail")} /></svg><span><span class="contact-label u-grow" data-i18n="emailCopy">{t("emailCopy")}</span><small>Gmail</small></span></button>
-        <button type="button" class="contact-link" data-copy-contact="phone"><svg class="icon" aria-hidden="true"><use href={withBase("assets/icons.svg#phone")} /></svg><span><span class="contact-label u-grow" data-i18n="phone">{t("phone")}</span><small data-i18n="sms">{t("sms")}</small></span></button>
-        <button type="button" class="contact-link" data-pending-link="해움한국어 웹"><svg class="icon" aria-hidden="true"><use href={withBase("assets/icons.svg#web")} /></svg><span><span class="contact-label u-grow" data-i18n="website">{t("website")}</span><small><span data-i18n="webPage">{t("webPage")}</span> <span aria-hidden="true">↗</span></small></span></button>
-        <button type="button" class="contact-link" data-pending-link="Instagram · Threads"><svg class="icon" aria-hidden="true"><use href={withBase("assets/icons.svg#instagram")} /></svg><span><span class="contact-label u-grow">Instagram · Threads</span><small data-i18n="channel">{t("channel")}</small></span></button>
-      </div>
+      <ContactLinks lang={lang} />
     </section>
   </main>
+  <ContactDrawer lang={lang} />
 </PageLayout>

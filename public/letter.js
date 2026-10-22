@@ -3,16 +3,47 @@
   const t = (key, values = {}) => (messages[key] || key).replace(/\{(\w+)\}/g, (match, name) => Object.hasOwn(values, name) ? String(values[name]) : match);
   const toast=document.querySelector('#letter-toast');
   let toastTimer;
-  function notify(message){toast.textContent=message;toast.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{toast.hidden=true},3500)}
+  function notify(message){
+    const drawerStatus = document.querySelector('#contact-drawer[open] [data-contact-status]');
+    const target = drawerStatus || toast;
+    target.textContent=message;target.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{target.hidden=true},3500);
+  }
   async function copy(text){
     if(navigator.clipboard&&window.isSecureContext){try{await navigator.clipboard.writeText(text);return true}catch{}}
     const field=document.createElement('textarea');field.value=text;field.setAttribute('readonly','');field.style.cssText='position:fixed;top:0;left:0;opacity:0';document.body.append(field);field.select();let ok=false;try{ok=document.execCommand('copy')}catch{}field.remove();return ok;
   }
   document.querySelectorAll('[data-copy-contact]').forEach(button=>button.addEventListener('click',async()=>{
-    const email=button.dataset.copyContact==='email';const value=email?'haeumkorean@gmail.com':'0507-1386-2171';
+    const email=button.dataset.copyContact==='email';const value=button.dataset.contactValue;
     notify(await copy(value)?t(email ? 'emailCopied' : 'phoneCopied') : t('contactCopyFailed', { value }));
   }));
   document.querySelectorAll('[data-pending-link]').forEach(button=>button.addEventListener('click',()=>notify(t('pendingLink'))));
+  const contactDrawer = document.querySelector('#contact-drawer');
+  const contactTriggers = [...document.querySelectorAll('[data-open-contact]')];
+  if (contactDrawer && typeof contactDrawer.showModal === 'function') {
+    let drawerTrigger;
+    let previousOverflow = '';
+    contactTriggers.forEach(trigger => trigger.addEventListener('click', event => {
+      event.preventDefault();
+      if (contactDrawer.open) return;
+      drawerTrigger = trigger;
+      previousOverflow = document.documentElement.style.overflow;
+      document.documentElement.style.overflow = 'hidden';
+      contactDrawer.querySelector('[data-contact-status]').hidden = true;
+      contactDrawer.showModal();
+      contactTriggers.forEach(button => button.setAttribute('aria-expanded', 'true'));
+    }));
+    contactDrawer.querySelector('[data-close-contact]').addEventListener('click', () => contactDrawer.close());
+    contactDrawer.addEventListener('click', event => {
+      if (event.target !== contactDrawer) return;
+      const bounds = contactDrawer.getBoundingClientRect();
+      if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) contactDrawer.close();
+    });
+    contactDrawer.addEventListener('close', () => {
+      document.documentElement.style.overflow = previousOverflow;
+      contactTriggers.forEach(button => button.setAttribute('aria-expanded', 'false'));
+      if (drawerTrigger) drawerTrigger.focus({preventScroll: true});
+    });
+  }
   // "편지 잘 읽었어요": one press per browser, no undo. The total lives in the like-counter web app
   // (data-like-endpoint); without an endpoint the button only counts this visit.
   const thanks=document.querySelector('.letter-thanks');

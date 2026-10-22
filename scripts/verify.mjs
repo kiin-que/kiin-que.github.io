@@ -6,6 +6,7 @@ import { parseHTML } from 'linkedom';
 const root = path.resolve('dist');
 const origin = 'https://kiin-que.github.io';
 const base = '/';
+const interfaceMessages = JSON.parse(fs.readFileSync('src/data/messages.json', 'utf8'));
 // Expectations come from the publish folder that fetch-publish.mjs copied for this build.
 const manifest = JSON.parse(fs.readFileSync(path.resolve('.publish/manifest.json'), 'utf8'));
 const notes = new Map(manifest.notes.map(note => [note.slug, note]));
@@ -42,7 +43,12 @@ for (const name of pages) {
   assert.equal(document.querySelectorAll('link[hreflang]').length, 3);
   const tail = name.replace(/^en\//, '').replace(/index\.html$/, '');
   assert.equal(document.querySelector('[data-language-link]').getAttribute('href'), base + (en ? '' : 'en/') + tail);
-  assert.ok(!document.querySelector('.letter-brand, .reading-tags, dialog'));
+  assert.ok(!document.querySelector('.letter-brand, .reading-tags'));
+  if (article) {
+    const back = document.querySelector('main > .reading-back');
+    assert.equal(back.textContent, interfaceMessages.backList[en ? 1 : 0]);
+    assert.ok(!back.classList.contains('u-grow'), 'List return link should not animate an underline');
+  }
   assert.ok(document.querySelector(article ? '.reading-site-footer' : '.letter-footer').textContent.includes('© 2026 Ki In'));
   assert.ok(document.querySelector('meta[name="description"]').getAttribute('content'));
   JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent);
@@ -98,9 +104,27 @@ for (const name of pages) {
     assert.equal(document.querySelectorAll('.letter-body strong[lang="ko"]').length, en ? 2 : 0);
     assert.ok(document.querySelector('.letter-body').textContent.includes(en ? 'With the posture of a question mark' : '물음표를 닮은 자세'));
     assert.equal(document.querySelector('.letter-nav a[href="#connect"]').textContent.trim(), en ? 'Connect ↗' : '연결 ↗');
+    const drawer = document.querySelector('#contact-drawer');
+    const trigger = document.querySelector('[data-open-contact]');
+    assert.equal(drawer.tagName.toLowerCase(), 'dialog');
+    assert.equal(trigger.getAttribute('aria-controls'), drawer.id);
+    assert.equal(trigger.getAttribute('aria-expanded'), 'false');
+    assert.equal(drawer.querySelectorAll('.contact-link').length, 8);
+    assert.equal(drawer.querySelectorAll('small, .contact-trailing').length, 0);
+    assert.equal(drawer.querySelector('[data-copy-contact="email"]').textContent.trim(), en ? 'Copy' : '복사');
+    assert.equal(drawer.querySelector('[data-copy-contact="phone"]').textContent.trim(), en ? 'Copy' : '복사');
+    for (const link of drawer.querySelectorAll('.contact-link')) assert.ok(link.querySelector('svg use'), 'Contact icon missing');
+    assert.equal(drawer.querySelector('[data-copy-contact="email"]').dataset.contactValue, 'haeumkorean@gmail.com');
+    assert.equal(drawer.querySelector('[data-copy-contact="phone"]').dataset.contactValue, '0507-1386-2171');
+    for (const href of ['https://haeumkorean.me/', 'https://www.instagram.com/haeumkorean/', 'https://www.threads.com/@haeumkorean', 'https://www.youtube.com/@studio_mama']) assert.ok(drawer.querySelector('a[href="' + href + '"]'));
+    assert.equal(drawer.querySelector('a[href*="linkedin.com"]').getAttribute('href'), 'https://www.linkedin.com/in/해원-하-38a18a323/');
+    assert.equal(drawer.querySelector('a[href*="github.com"]').getAttribute('href'), 'https://github.com/jasujung99');
     const messages = JSON.parse(document.querySelector('#page-translations').textContent);
     assert.equal(document.querySelectorAll('.writing-entry').length, entryCount);
     for (const entry of document.querySelectorAll('.writing-entry')) assert.ok(entry.querySelector('.writing-title').textContent.trim(), 'Untitled list entry');
+    assert.equal(document.querySelectorAll('.writing-excerpt, .writing-read').length, 0);
+    assert.equal(document.querySelectorAll('#connect .contact-social').length, 1);
+    assert.equal(document.querySelectorAll('#connect .contact-social a').length, 2);
     assert.equal(document.querySelectorAll('.archive-image').length, 0);
     for (const node of document.querySelectorAll('[data-i18n]')) {
       const key = node.getAttribute('data-i18n');

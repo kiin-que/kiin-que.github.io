@@ -1,0 +1,56 @@
+---
+import { translate, withBase } from '../lib/i18n';
+import { contact } from '../data/contact';
+const {lang, variant = 'home'} = Astro.props;
+const t = (key: string) => translate(lang, key);
+const drawer = variant === 'drawer';
+---
+<div class="contact-links" aria-label={t('contactLabel')}>
+  <button type="button" class="contact-link" data-copy-contact="email" data-contact-value={contact.email} aria-label={drawer ? t('emailCopy') : undefined}>
+    <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#mail')} /></svg>
+    <span><span class="contact-label u-grow">{t(drawer ? 'copyContact' : 'emailCopy')}</span>{!drawer && <small>{contact.email}</small>}</span>
+  </button>
+  <button type="button" class="contact-link" data-copy-contact="phone" data-contact-value={contact.phone} aria-label={drawer ? t('phoneCopy') : undefined}>
+    <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#phone')} /></svg>
+    <span><span class="contact-label u-grow">{t(drawer ? 'copyContact' : 'phone')}</span>{!drawer && <small>{contact.phone} · {t('sms')}</small>}</span>
+  </button>
+  {contact.website ? <a class="contact-link" href={contact.website} target="_blank" rel="noopener noreferrer">
+    <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#web')} /></svg>
+    <span><span class="contact-label u-grow">{drawer ? '해움한국어' : t('website')}{!drawer && ' ↗'}</span>{!drawer && <small>{t('webPage')}</small>}</span>
+  </a> : <button type="button" class="contact-link" data-pending-link="해움한국어 웹">
+    <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#web')} /></svg>
+    <span><span class="contact-label u-grow">{t('website')}</span><small>{t('webPage')} ↗</small></span>
+  </button>}
+  {drawer ? <>
+    <a class="contact-link" href={contact.instagram} target="_blank" rel="noopener noreferrer">
+      <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#instagram')} /></svg>
+      <span class="contact-label">Instagram</span>
+    </a>
+    <a class="contact-link" href={contact.threads} target="_blank" rel="noopener noreferrer">
+      <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#threads')} /></svg>
+      <span class="contact-label">Threads</span>
+    </a>
+  </> : <div class="contact-link contact-social">
+    <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#instagram')} /></svg>
+    <div class="contact-social-body">
+      <div class="contact-social-links">
+        <a class="contact-label u-grow" href={contact.instagram} target="_blank" rel="noopener noreferrer">Instagram</a>
+        <span aria-hidden="true">·</span>
+        <a class="contact-label u-grow" href={contact.threads} target="_blank" rel="noopener noreferrer">Threads</a>
+      </div>
+      <small>@{contact.handle}</small>
+    </div>
+  </div>}
+  <a class="contact-link" href={contact.youtube} target="_blank" rel="noopener noreferrer">
+    <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#youtube')} /></svg>
+    <span><span class="contact-label u-grow">YouTube</span>{!drawer && <small>@studio_mama</small>}</span>
+  </a>
+  <a class="contact-link" href={contact.linkedin} target="_blank" rel="noopener noreferrer">
+    <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#linkedin')} /></svg>
+    <span><span class="contact-label">LinkedIn</span>{!drawer && <small>{t('careerActivities')}</small>}</span>
+  </a>
+  <a class="contact-link" href={contact.github} target="_blank" rel="noopener noreferrer">
+    <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#github')} /></svg>
+    <span><span class="contact-label u-grow">GitHub</span>{!drawer && <small>@jasujung99</small>}</span>
+  </a>
+</div>
