@@ -46,7 +46,7 @@ for (const name of pages) {
   assert.ok(!document.querySelector('.letter-brand, .reading-tags'));
   if (article) {
     const back = document.querySelector('main > .reading-back');
-    assert.equal(back.textContent, interfaceMessages.backList[en ? 1 : 0]);
+    assert.equal(back.textContent, interfaceMessages[imageWork ? 'backQuestions' : 'backList'][en ? 1 : 0]);
     assert.ok(!back.classList.contains('u-grow'), 'List return link should not animate an underline');
   }
   assert.ok(document.querySelector(article ? '.reading-site-footer' : '.letter-footer').textContent.includes('© 2026 Ki In'));
