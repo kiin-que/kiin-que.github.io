@@ -4,16 +4,20 @@ import SiteFooter from '../components/SiteFooter.astro';
 import { withBase, localPath, clientMessages } from '../lib/i18n';
 import { asset } from '../lib/assets';
 import type { Language } from '../lib/i18n';
-const {lang, title, description, article = false, slug = '', published, artwork} = Astro.props as {
+const {lang, title, description, article = false, slug = '', published, artwork, project} = Astro.props as {
   lang: Language; title: string; description: string; article?: boolean; slug?: string; published?: string;
+  project?: {image: string};
   artwork?: {image: string; created: string; tool: string; mime: string};
 };
-const detailSection = artwork ? 'works' : 'writing';
+const detailSection = artwork || project ? 'works' : 'writing';
 const tail = article ? detailSection + '/' + slug + '/' : '';
 const absolute = (path: string) => new URL(path, Astro.site).href;
 const canonical = absolute(localPath(lang, tail));
-const image = absolute(withBase(artwork ? artwork.image : 'assets/portrait-soft.png'));
-const schema = artwork ? {
+const image = absolute(withBase(artwork ? artwork.image : project ? project.image : 'assets/portrait-soft.png'));
+const schema = project ? {
+  '@context': 'https://schema.org', '@type': 'CreativeWork', name: title.replace(/ · Ki In$/, ''), description,
+  inLanguage: lang, url: canonical, image,
+} : artwork ? {
   '@context': 'https://schema.org', '@type': 'VisualArtwork', name: title.replace(/ · Ki In$/, ''), description,
   dateCreated: artwork.created, inLanguage: lang, url: canonical, image,
   artMedium: 'AI-generated image (' + artwork.tool + ')', encodingFormat: artwork.mime,
@@ -39,16 +43,17 @@ const json = (value: unknown) => JSON.stringify(value).replace(/</g, '\u003c');
   <link rel="alternate" hreflang="ko" href={absolute(localPath('ko', tail))} />
   <link rel="alternate" hreflang="en" href={absolute(localPath('en', tail))} />
   <link rel="alternate" hreflang="x-default" href={absolute(localPath('ko', tail))} />
-  <meta property="og:type" content={article && !artwork ? 'article' : 'website'} />
+  <meta property="og:type" content={article && !artwork && !project ? 'article' : 'website'} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:url" content={canonical} />
   <meta property="og:locale" content={lang === 'ko' ? 'ko_KR' : 'en_US'} />
   <meta property="og:image" content={image} />
-  <meta name="twitter:card" content={artwork ? 'summary_large_image' : 'summary'} />
+  <meta name="twitter:card" content={artwork || project ? 'summary_large_image' : 'summary'} />
   {published && <meta property="article:published_time" content={published} />}
   <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
   {['common.css', 'letter.css', 'reading.css', 'language.css'].map(file => <link rel="stylesheet" href={asset(file)} />)}
+  {article && <link rel="stylesheet" href={asset('detail.css')} />}
   <script type="application/ld+json" set:html={json(schema)} />
 </head>
 <body class={article ? 'reading-page' : 'letter-page'}>

@@ -5,7 +5,7 @@ Ki In의 편지와 물음표들. Astro가 한국어와 영어 페이지를 별�
 - 사이트: https://kiin-que.github.io/
 - English: https://kiin-que.github.io/en/
 - 배포: main 브랜치에 push하거나 Actions에서 "Run workflow"를 누르면 빌드·검증 후 반영됩니다. PR에서는 배포 없이 빌드와 검증만 실행합니다.
-- 글과 이미지 작업은 이 레포에 없습니다. 빌드할 때 Drive의 `archive/publish/`에서 읽어 옵니다(아래 "콘텐츠").
+- 글과 이미지·문서 도구 작업의 원본은 이 레포에 없습니다. 빌드할 때 Drive의 `archive/publish/`에서 읽어 옵니다(아래 "콘텐츠").
 
 ## 로컬 작업
 
@@ -28,7 +28,7 @@ pnpm preview
 글과 이미지 작업의 원본은 Drive의 `archive/publish/` 한 곳에만 둡니다. 형식은 `archive/_meta/metadata-guide.md`를 따릅니다.
 
 - `publish/notes/{slug}.ko.md`, `{slug}.en.md`: 글. 두 언어가 모두 있어야 발행됩니다. `kind`가 `"letter"`이면 "편지", 없거나 `"reading"`이면 "독서록"으로 표시합니다.
-- `publish/works/{slug}.md` + 이미지 파일: 이미지 작업. 원본 파일명과 확장자를 보존합니다. 사용자가 제목을 지정하지 않으면 '무제'/'Untitled'로 표시하며 임의로 제목을 만들지 않습니다. 생성 시기가 월까지만 확인되면 YYYY-MM을 씁니다.
+- `publish/works/{slug}.md` + 이미지 파일: 이미지 또는 문서 도구 작업. `kind`가 없거나 `"image"`이면 이미지 작업이며, `"project"`이면 문서 도구 상세 서식을 씁니다. 원본 파일명과 확장자를 보존합니다. 이미지 제목을 지정하지 않으면 '무제'/'Untitled'로 표시하며 임의로 제목을 만들지 않습니다. 생성 시기가 월까지만 확인되면 YYYY-MM을 씁니다.
 
 빌드 순서:
 
@@ -41,6 +41,18 @@ pnpm preview
 
 발행 폴더에서 파일을 빼고 다시 빌드하면 그 글은 사이트에서 사라지고, 이 레포에는 원고가 남지 않습니다.
 
+### 문서 도구 작업
+
+프로젝트도 원본은 Drive의 `publish/works/`에서 읽습니다. 설명 파일에는 JSON 값으로 다음 항목을 적습니다.
+
+- 공통: `slug`, `kind: "project"`, `category`, `image`, `width`, `height`, `alt_ko`, `alt_en`
+- 문구: `title_ko/en`, `description_ko/en`, `overview_ko/en`
+- 주요 작업: `features_ko/en`에 비어 있지 않은 문자열 배열
+- 출처: `external_url`에 HTTPS 공개 소개 주소
+- 선택: `created`. 확인된 날짜가 없으면 생략하며 사이트에도 날짜를 표시하지 않습니다.
+
+대표 이미지는 기존 이미지 작업과 같은 정사각 영역에 비율을 유지해 넣고, 상세에서는 공통 제목·본문·출처 서식 안에 표시합니다. 코드 PR만으로 Drive의 작업 목록이 바뀌지는 않습니다. 새 작업의 설명 파일과 이미지도 발행 폴더에 있어야 실제 페이지가 생성됩니다. 미리보기 중인 콘텐츠는 발행 폴더 밖에 보관하고, 코드와 콘텐츠를 함께 확인한 뒤 발행합니다.
+
 ### 앱스 스크립트 (apps-script/)
 
 발행 전용 구글 계정에서 실행합니다. 그 계정은 `archive/publish/` 폴더에 보기 권한만 있으므로, 스크립트가 Drive의 다른 자료를 읽을 수 없습니다. `Code.gs`의 `PUBLISH_FOLDER_ID`에 발행 폴더 ID를 넣고 `setup()`을 한 번 실행하면 폴더 ID와 무작위 토큰이 스크립트 속성에 저장되고, 계정이 상위 폴더까지 볼 수 있으면 경고가 나옵니다. 그다음 웹 앱(실행: 나, 액세스: 모든 사용자)으로 배포합니다. 토큰이 맞지 않는 요청에는 `{"error":"unauthorized"}`만 돌려주고, 계정이 발행 폴더의 상위 폴더까지 볼 수 있으면 발행을 거부합니다.
@@ -49,7 +61,9 @@ pnpm preview
 
 - src/data/notes.ts, works.ts: 글과 이미지 작업의 통합 목록, 카테고리·건수, 날짜 표시
 - src/data/messages.json: 편지와 메뉴 문구
-- src/components/: 홈·글·내비게이션 공통 요소
+- src/layouts/DetailPage.astro: 글·이미지·도구 상세의 공통 제목, 본문, 출처, 이동 서식
+- public/detail.css: 상세 페이지 공통 서식과 text/image/project 유형별 차이, 한영·모바일 규칙
+- src/components/: 홈·글·내비게이션과 유형별 상세 콘텐츠
 - public/*.css: 기존 시안의 스타일과 모션
 - public/letter.js: 공감, 분류, 연락처 복사, 스크롤 모션
 - public/assets/fonts/: 로컬 글꼴과 라이선스

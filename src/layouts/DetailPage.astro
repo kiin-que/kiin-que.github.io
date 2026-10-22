@@ -1,0 +1,38 @@
+---
+import PageLayout from './PageLayout.astro';
+import { translate, localPath } from '../lib/i18n';
+import type { Language } from '../lib/i18n';
+interface Props {
+  lang: Language;
+  type: 'text' | 'image' | 'project';
+  title: string;
+  description: string;
+  label: string;
+  slug: string;
+  pageTitle?: string;
+  date?: string;
+  dateLabel?: string;
+  published?: string;
+  source?: string;
+  artwork?: {image: string; created: string; tool: string; mime: string};
+  project?: {image: string};
+}
+const {lang, type, title, description, label, slug, pageTitle = title + ' · Ki In', date, dateLabel, published, source, artwork, project} = Astro.props;
+const t = (key: string) => translate(lang, key);
+const back = localPath(lang) + '#writing';
+---
+<PageLayout lang={lang} title={pageTitle} description={description} article slug={slug} published={published} artwork={artwork} project={project}>
+  <main id="main" class:list={['reading-main', 'detail-main', 'detail-main--' + type]}>
+    <a class="reading-back" href={back}>{t(type === 'text' ? 'backList' : 'backQuestions')}</a>
+    <article class="reading-article detail-article" aria-labelledby="detail-title">
+      <header class="detail-header">
+        <p class="reading-meta"><span>{label}</span>{date && <time datetime={date}>{dateLabel}</time>}</p>
+        <h1 id="detail-title">{title}</h1>
+        <p class="reading-deck">{description}</p>
+      </header>
+      <div class="reading-body detail-body"><slot /></div>
+      {(source || Astro.slots.has('source')) && <footer class="reading-credits detail-source">{source ? <p>{source}</p> : <slot name="source" />}</footer>}
+    </article>
+    <nav class="reading-bottom" aria-label={t('readingNavigation')}><a href={back} class="u-grow">{t('backQuestions')}</a><a href="#main" class="reading-top u-grow">{t('shortTop')}</a></nav>
+  </main>
+</PageLayout>

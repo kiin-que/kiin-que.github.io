@@ -1,0 +1,16 @@
+---
+import DetailPage from '../layouts/DetailPage.astro';
+import { translate, withBase } from '../lib/i18n';
+const { lang, work } = Astro.props;
+const t = (key: string) => translate(lang, key);
+---
+<DetailPage lang={lang} type="project" slug={work.slug} title={work.title} description={work.description} label={t('projectWork')} date={work.created} dateLabel={work.dateLabel} project={work}>
+  <p>{work.overview}</p>
+  <h2>{t('projectFeatures')}</h2>
+  <ul>{work.features.map((feature: string) => <li>{feature}</li>)}</ul>
+  <figure class="detail-figure project-work-figure">
+    <img src={withBase(work.image)} width={work.width} height={work.height} alt={work.alt} decoding="async" />
+    <figcaption>{t('projectPreviewCaption')}</figcaption>
+  </figure>
+  <p slot="source">{t('projectSource')} <a class="detail-source-link project-work-link u-grow" href={work.external_url} target="_blank" rel="noopener noreferrer">{t('viewOnAgensi')} ↗</a></p>
+</DetailPage>

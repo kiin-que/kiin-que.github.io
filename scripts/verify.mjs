@@ -53,6 +53,21 @@ for (const name of pages) {
   const slug = tail.split('/')[1];
   if (imageWork) {
     const work = works.get(slug);
+    if (work.kind === 'project') {
+      const title = en ? work.title_en : work.title_ko;
+      assert.equal(document.querySelector('h1').textContent, title);
+      assert.equal(document.title, title + ' · Ki In');
+      assert.equal(document.querySelector('.reading-deck').textContent, en ? work.description_en : work.description_ko);
+      assert.equal(document.querySelector('.reading-body p').textContent, en ? work.overview_en : work.overview_ko);
+      assert.equal(document.querySelectorAll('.reading-body li').length, (en ? work.features_en : work.features_ko).length);
+      assert.equal(document.querySelector('.project-work-link').getAttribute('href'), work.external_url);
+      const img = document.querySelector('.project-work-figure img');
+      assert.equal(img.getAttribute('src'), base + 'media/works/' + work.image);
+      assert.equal(img.getAttribute('alt'), en ? work.alt_en : work.alt_ko);
+      assert.equal(document.querySelector('meta[property="og:image"]').getAttribute('content'), origin + base + 'media/works/' + work.image);
+      assert.equal(JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)['@type'], 'CreativeWork');
+      if (!work.created) assert.equal(document.querySelector('time'), null, 'Do not invent a project date');
+    } else {
     const title = (en ? work.title_en : work.title_ko).trim() || (en ? 'Untitled' : '무제');
     const tool = en ? 'Image generated with ' + work.tool : work.tool + '로 생성한 이미지';
     assert.equal(document.querySelector('h1').textContent, title);
@@ -68,6 +83,7 @@ for (const name of pages) {
     assert.equal(artwork['@type'], 'VisualArtwork');
     assert.equal(artwork.dateCreated, work.created);
     assert.equal(artwork.name, title);
+    }
   } else if (article) {
     const note = notes.get(slug)[en ? 'en' : 'ko'];
     assert.equal(document.title, note.pageTitle);
@@ -158,7 +174,7 @@ for (const name of pages) {
     assert.equal(document.querySelectorAll('.scroll-reveal:not(.is-visible)').length, 0);
   }
 }
-for (const file of ['common.css', 'letter.css', 'reading.css', 'language.css']) {
+for (const file of ['common.css', 'letter.css', 'reading.css', 'language.css', 'detail.css']) {
   const css = fs.readFileSync(path.join(root, file), 'utf8');
   for (const match of css.matchAll(/url\(['"]?([^'"\)]+)['"]?\)/g)) resource(match[1], origin + base + file);
 }
@@ -166,4 +182,4 @@ const sitemap = fs.readFileSync(path.join(root, 'sitemap.xml'), 'utf8');
 assert.equal((sitemap.match(/<loc>/g) || []).length, pages.length);
 assert.ok(!sitemap.includes('?lang='));
 assert.ok(fs.readFileSync(path.join(root, 'robots.txt'), 'utf8').includes(origin + base + 'sitemap.xml'));
-console.log('Verified ' + pages.length + ' bilingual pages (' + notes.size + ' note(s), ' + works.size + ' image work(s)), ' + checked + ' local links/assets, artwork metadata, untitled fallback, category counts/restoration, one-way likes with the counter, and scroll reveals.');
+console.log('Verified ' + pages.length + ' bilingual pages (' + notes.size + ' note(s), ' + works.size + ' visual work(s)), ' + checked + ' local links/assets, artwork metadata, untitled fallback, category counts/restoration, one-way likes with the counter, and scroll reveals.');
