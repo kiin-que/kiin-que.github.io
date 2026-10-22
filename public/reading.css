@@ -7,7 +7,7 @@
 .writing-entry { margin: 0; padding: 0; }
 .writing-entry-link { display: grid; align-items: center; width: calc(100% + 32px); height: 100%; min-height: 112px; margin-inline: -16px; padding: 20px 16px; border-radius: 16px; background: transparent; color: var(--ink); text-align: left; text-decoration: none; transition: background-color 300ms ease; }
 .writing-title { margin: 13px 0 0; font-family: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size: 18px; font-weight: 400; line-height: 1.6; letter-spacing: -.01em; word-break: keep-all; overflow-wrap: anywhere; transition: color 300ms ease; }
-.writing-entry-image .writing-entry-link { grid-template-columns: 80px minmax(0, 1fr); gap: 24px; }
+.writing-entry-image .writing-entry-link { grid-template-columns: minmax(0, 1fr) 80px; gap: 24px; }
 .writing-thumbnail { display: block; width: 100%; aspect-ratio: 1; height: auto; object-fit: contain; }
 .writing-entry-text { min-width: 0; }
 
@@ -18,7 +18,7 @@
 @media (max-width: 540px) {
   .writing-section { margin-top: 82px; }
   .writing-title { margin-top: 12px; font-size: 18px; line-height: 1.65; }
-  .writing-entry-image .writing-entry-link { grid-template-columns: 72px minmax(0, 1fr); gap: 18px; }
+  .writing-entry-image .writing-entry-link { grid-template-columns: minmax(0, 1fr) 72px; gap: 18px; }
 }
 
 .writing-filters { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; margin: 0 auto 32px; }
