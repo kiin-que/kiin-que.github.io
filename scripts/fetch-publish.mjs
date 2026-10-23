@@ -3,6 +3,7 @@
 // Only files that pass the checks below reach the site, so a stray draft fails the build instead of going live.
 import fs from 'node:fs';
 import path from 'node:path';
+import sharp from 'sharp';
 
 if (fs.existsSync('.env')) process.loadEnvFile('.env');
 
@@ -97,9 +98,26 @@ for (const file of files) {
     need(data, ['slug', 'category', 'image', 'width', 'height', 'alt_ko', 'alt_en'], file.path);
     if (kind === 'image') need(data, ['created', 'tool'], file.path);
     if (kind === 'project') {
-      need(data, ['title_ko', 'title_en', 'description_ko', 'description_en', 'overview_ko', 'overview_en', 'features_ko', 'features_en', 'external_url'], file.path);
-      for (const key of ['features_ko', 'features_en']) if (!Array.isArray(data[key]) || !data[key].length || data[key].some(value => typeof value !== 'string' || !value.trim())) throw new Error(file.path + ': invalid ' + key);
-      if (new URL(data.external_url).protocol !== 'https:') throw new Error(file.path + ': project link must use HTTPS');
+      need(data, ['title_ko', 'title_en', 'description_ko', 'description_en', 'overview_ko', 'overview_en'], file.path);
+      for (const key of ['features_ko', 'features_en']) if (data[key] !== undefined && (!Array.isArray(data[key]) || data[key].some(value => typeof value !== 'string' || !value.trim()))) throw new Error(file.path + ': invalid ' + key);
+      if ((data.features_ko?.length ?? 0) !== (data.features_en?.length ?? 0)) throw new Error(file.path + ': features must have matching ko/en items');
+      if (data.external_url && new URL(data.external_url).protocol !== 'https:') throw new Error(file.path + ': project link must use HTTPS');
+      if (Boolean(data.label_ko) !== Boolean(data.label_en)) throw new Error(file.path + ': labels require both ko/en');
+      if (data.sources !== undefined) {
+        if (!Array.isArray(data.sources)) throw new Error(file.path + ': sources must be an array');
+        for (const source of data.sources) {
+          need(source, ['label_ko', 'label_en'], file.path);
+          if (source.url !== undefined && new URL(source.url).protocol !== 'https:') throw new Error(file.path + ': source links must use HTTPS');
+        }
+      }
+      if (data.gallery !== undefined) {
+        if (!Array.isArray(data.gallery) || !data.gallery.length) throw new Error(file.path + ': gallery must be a non-empty array');
+        for (const item of data.gallery) {
+          need(item, ['image', 'width', 'height', 'alt_ko', 'alt_en', 'caption_ko', 'caption_en'], file.path);
+          if (!Number.isInteger(item.width) || item.width <= 0 || !Number.isInteger(item.height) || item.height <= 0) throw new Error(file.path + ': invalid gallery dimensions');
+          if (!images.has(item.image)) throw new Error(file.path + ': gallery image "' + item.image + '" is not in works/');
+        }
+      }
     }
     if (data.slug !== slug) throw new Error(file.path + ': slug must match the file name');
     if (!CATEGORIES.includes(data.category)) throw new Error(file.path + ': unknown category "' + data.category + '"');
@@ -122,14 +140,32 @@ if (problems.length) {
   process.exit(1);
 }
 
+// Decode and prepare large gallery images before writing any build outputs.
+const previews = new Map();
+for (const work of works.filter(work => work.gallery?.length)) {
+  for (const item of [work, ...work.gallery]) {
+    item.preview = '_previews/' + item.image + '.webp';
+    if (!previews.has(item.preview)) {
+      previews.set(item.preview, await sharp(images.get(item.image).data)
+        .resize({width: 2000, height: 2000, fit: 'inside', withoutEnlargement: true})
+        .webp({quality: 90}).toBuffer());
+    }
+  }
+}
 fs.rmSync(OUT, { recursive: true, force: true });
 fs.rmSync(MEDIA, { recursive: true, force: true });
 fs.mkdirSync(path.join(OUT, 'notes'), { recursive: true });
 fs.mkdirSync(MEDIA, { recursive: true });
+if (previews.size) fs.mkdirSync(path.join(MEDIA, '_previews'), {recursive: true});
+for (const [name, bytes] of previews) fs.writeFileSync(path.join(MEDIA, name), bytes);
 for (const [slug, entry] of notes) {
   for (const lang of ['ko', 'en']) fs.writeFileSync(path.join(OUT, 'notes', slug + '.' + lang + '.md'), entry[lang].text);
 }
-for (const work of works) fs.writeFileSync(path.join(MEDIA, work.image), images.get(work.image).data);
+for (const work of works) {
+  for (const image of new Set([work.image, ...(work.gallery ?? []).map(item => item.image)])) {
+    fs.writeFileSync(path.join(MEDIA, image), images.get(image).data);
+  }
+}
 fs.writeFileSync(path.join(OUT, 'works.json'), JSON.stringify(works.map(work => ({ id: work.slug, ...work })), null, 2));
 fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify({
   notes: [...notes].map(([slug, entry]) => ({ slug, ko: entry.ko.data, en: entry.en.data })),

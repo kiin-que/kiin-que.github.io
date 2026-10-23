@@ -20,6 +20,7 @@ interface Props {
 const {lang, type, title, description, label, slug, pageTitle = title + ' · Ki In', date, dateLabel, published, source, artwork, project} = Astro.props;
 const t = (key: string) => translate(lang, key);
 const back = localPath(lang) + '#writing';
+const sourceContent = Astro.slots.has('source') ? (await Astro.slots.render('source')).trim() : '';
 ---
 <PageLayout lang={lang} title={pageTitle} description={description} article slug={slug} published={published} artwork={artwork} project={project}>
   <main id="main" class:list={['reading-main', 'detail-main', 'detail-main--' + type]}>
@@ -31,7 +32,7 @@ const back = localPath(lang) + '#writing';
         <p class="reading-deck">{description}</p>
       </header>
       <div class="reading-body detail-body"><slot /></div>
-      {(source || Astro.slots.has('source')) && <footer class="reading-credits detail-source">{source ? <p>{source}</p> : <slot name="source" />}</footer>}
+      {(source || sourceContent) && <footer class="reading-credits detail-source">{source ? <p>{source}</p> : <Fragment set:html={sourceContent} />}</footer>}
     </article>
     <nav class="reading-bottom" aria-label={t('readingNavigation')}><a href={back} class="u-grow">{t('backQuestions')}</a><a href="#main" class="reading-top u-grow">{t('shortTop')}</a></nav>
   </main>

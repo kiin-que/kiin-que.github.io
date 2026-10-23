@@ -42,9 +42,18 @@ export async function getProjectWorks(lang: Language) {
   return entries.map(({data: work}) => ({
     ...work,
     image: 'media/works/' + work.image,
+    preview: work.preview ? 'media/works/' + work.preview : '',
     title: lang === 'en' ? work.title_en : work.title_ko,
     description: lang === 'en' ? work.description_en : work.description_ko,
     overview: lang === 'en' ? work.overview_en : work.overview_ko,
+    label: (lang === 'en' ? work.label_en : work.label_ko) || translate(lang, 'projectWork'),
+    sources: work.sources.map(source => ({url: source.url, label: lang === 'en' ? source.label_en : source.label_ko})),
+    gallery: work.gallery.map(item => ({
+      ...item, image: 'media/works/' + item.image,
+      preview: item.preview ? 'media/works/' + item.preview : '',
+      alt: lang === 'en' ? item.alt_en : item.alt_ko,
+      caption: lang === 'en' ? item.caption_en : item.caption_ko,
+    })),
     features: lang === 'en' ? work.features_en : work.features_ko,
     alt: lang === 'en' ? work.alt_en : work.alt_ko,
     dateLabel: work.created ? formatWorkDate(work.created, lang) : '',
@@ -57,7 +66,7 @@ export async function getDetailedWorks(lang: Language) {
 
 export async function getWorks(lang: Language) {
   return [
-    ...(await getProjectWorks(lang)).map(work => ({ ...work, type: 'project' as const, label: 'projectWork', date: work.created, path: 'works/' + work.slug + '/' })),
+    ...(await getProjectWorks(lang)).map(work => ({ ...work, image: work.preview || work.image, type: 'project' as const, date: work.created, path: 'works/' + work.slug + '/' })),
     ...(await getNotes(lang)).map(note => ({
       slug: note.slug, type: 'note' as const, label: note.frontmatter.kind === 'letter' ? 'letterNote' : 'readingNote', category: note.frontmatter.category,
       title: note.frontmatter.title, description: note.frontmatter.description,
@@ -67,5 +76,5 @@ export async function getWorks(lang: Language) {
     ...(await getImageWorks(lang)).map(work => ({
       ...work, type: 'image' as const, label: 'imageWork', date: work.created, path: 'works/' + work.slug + '/',
     })),
-  ];
+  ].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
 }
