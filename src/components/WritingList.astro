@@ -9,7 +9,7 @@ const works = await getWorks(lang);
 {works.map(work => <li class:list={['writing-entry', {'writing-entry-image': Boolean(work.image), 'writing-entry-project': work.type === 'project'}]} data-writing-category={work.category}>
   <a class="writing-entry-link" href={localPath(lang, work.path)}>
     <div class="writing-entry-text">
-      <p class="writing-meta"><span>{t(work.label)}</span>{work.date && <time datetime={work.date}>{work.dateLabel}</time>}</p>
+      <p class="writing-meta"><span>{work.type === 'project' ? work.label : t(work.label)}</span>{work.date && <time datetime={work.date}>{work.dateLabel}</time>}</p>
       <h3 class="writing-title">{work.title}</h3>
     </div>
     {work.image && <img class="writing-thumbnail" src={withBase(work.image)} width={work.width} height={work.height} alt={work.alt} loading="lazy" decoding="async" />}

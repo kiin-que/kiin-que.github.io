@@ -64,12 +64,30 @@ for (const name of pages) {
       assert.equal(document.querySelector('h1').textContent, title);
       assert.equal(document.title, title + ' · Ki In');
       assert.equal(document.querySelector('.reading-deck').textContent, en ? work.description_en : work.description_ko);
-      assert.equal(document.querySelector('.reading-body p').textContent, en ? work.overview_en : work.overview_ko);
-      assert.equal(document.querySelectorAll('.reading-body li').length, (en ? work.features_en : work.features_ko).length);
-      assert.equal(document.querySelector('.project-work-link').getAttribute('href'), work.external_url);
+      assert.equal([...document.querySelectorAll('.project-overview p')].map(p => p.textContent).join('\n\n'), en ? work.overview_en : work.overview_ko);
+      assert.equal(document.querySelectorAll('.reading-body li').length, (en ? work.features_en : work.features_ko)?.length ?? 0);
+      assert.equal(document.querySelector('.project-work-link')?.getAttribute('href'), work.external_url);
+      const sourceItems = [...document.querySelectorAll('.project-source-item')];
+      assert.equal(sourceItems.length, work.sources?.length ?? 0);
+      (work.sources ?? []).forEach((source, index) => {
+        assert.equal(sourceItems[index].querySelector('a')?.getAttribute('href'), source.url);
+        assert.equal(sourceItems[index].textContent, (en ? source.label_en : source.label_ko) + (source.url ? ' ↗' : ''));
+      });
+      const gallery = work.gallery ?? [];
+      if (gallery.length) {
+        const figures = [...document.querySelectorAll('.project-gallery-item')];
+        assert.equal(figures.length, gallery.length);
+        gallery.forEach((item, index) => {
+          assert.equal(figures[index].querySelector('img').getAttribute('src'), base + 'media/works/' + (item.preview || item.image));
+          assert.equal(figures[index].querySelector('img').getAttribute('alt'), en ? item.alt_en : item.alt_ko);
+          assert.equal(figures[index].querySelector('h2').textContent, en ? item.caption_en : item.caption_ko);
+          assert.equal(figures[index].querySelector('a').getAttribute('href'), base + 'media/works/' + item.image);
+        });
+      }
       const img = document.querySelector('.project-work-figure img');
-      assert.equal(img.getAttribute('src'), base + 'media/works/' + work.image);
-      assert.equal(img.getAttribute('alt'), en ? work.alt_en : work.alt_ko);
+      const firstImage = gallery[0] ?? work;
+      assert.equal(img.getAttribute('src'), base + 'media/works/' + (firstImage.preview || firstImage.image));
+      assert.equal(img.getAttribute('alt'), en ? firstImage.alt_en : firstImage.alt_ko);
       assert.equal(document.querySelector('meta[property="og:image"]').getAttribute('content'), origin + base + 'media/works/' + work.image);
       assert.equal(JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)['@type'], 'CreativeWork');
       if (!work.created) assert.equal(document.querySelector('time'), null, 'Do not invent a project date');
@@ -121,6 +139,8 @@ for (const name of pages) {
     assert.equal(drawer.querySelector('a[href*="github.com"]').getAttribute('href'), 'https://github.com/jasujung99');
     const messages = JSON.parse(document.querySelector('#page-translations').textContent);
     assert.equal(document.querySelectorAll('.writing-entry').length, entryCount);
+    const dates = [...document.querySelectorAll('.writing-entry')].map(entry => entry.querySelector('time')?.getAttribute('datetime') ?? '');
+    assert.deepEqual(dates, [...dates].sort((a, b) => b.localeCompare(a)), 'Work list should be newest first, with undated entries last');
     for (const entry of document.querySelectorAll('.writing-entry')) assert.ok(entry.querySelector('.writing-title').textContent.trim(), 'Untitled list entry');
     assert.equal(document.querySelectorAll('.writing-excerpt, .writing-read').length, 0);
     assert.equal(document.querySelectorAll('#connect .contact-social').length, 1);
