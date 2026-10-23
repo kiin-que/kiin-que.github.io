@@ -8,4 +8,5 @@ export const contact = {
   youtube: 'https://www.youtube.com/@studio_mama',
   linkedin: 'https://www.linkedin.com/in/해원-하-38a18a323/',
   github: 'https://github.com/jasujung99',
+  reddit: 'https://www.reddit.com/user/haeumkorean/',
 };
