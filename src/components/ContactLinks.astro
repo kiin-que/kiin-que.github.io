@@ -14,6 +14,10 @@ const drawer = variant === 'drawer';
     <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#phone')} /></svg>
     <span><span class="contact-label u-grow">{t(drawer ? 'copyContact' : 'phone')}</span>{!drawer && <small>{contact.phone} · {t('sms')}</small>}</span>
   </button>
+  <a class="contact-link" href={contact.haeonWebsite} target="_blank" rel="noopener noreferrer">
+    <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#web')} /></svg>
+    <span><span class="contact-label u-grow">{t('haeonWebsite')}{!drawer && ' ↗'}</span>{!drawer && <small>{t('webPage')}</small>}</span>
+  </a>
   {contact.website ? <a class="contact-link" href={contact.website} target="_blank" rel="noopener noreferrer">
     <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#web')} /></svg>
     <span><span class="contact-label u-grow">{drawer ? '해움한국어' : t('website')}{!drawer && ' ↗'}</span>{!drawer && <small>{t('webPage')}</small>}</span>

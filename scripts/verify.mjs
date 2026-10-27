@@ -127,14 +127,14 @@ for (const name of pages) {
     assert.equal(drawer.tagName.toLowerCase(), 'dialog');
     assert.equal(trigger.getAttribute('aria-controls'), drawer.id);
     assert.equal(trigger.getAttribute('aria-expanded'), 'false');
-    assert.equal(drawer.querySelectorAll('.contact-link').length, 9);
+    assert.equal(drawer.querySelectorAll('.contact-link').length, 10);
     assert.equal(drawer.querySelectorAll('small, .contact-trailing').length, 0);
     assert.equal(drawer.querySelector('[data-copy-contact="email"]').textContent.trim(), en ? 'Copy' : '복사');
     assert.equal(drawer.querySelector('[data-copy-contact="phone"]').textContent.trim(), en ? 'Copy' : '복사');
     for (const link of drawer.querySelectorAll('.contact-link')) assert.ok(link.querySelector('svg use'), 'Contact icon missing');
     assert.equal(drawer.querySelector('[data-copy-contact="email"]').dataset.contactValue, 'haeumkorean@gmail.com');
     assert.equal(drawer.querySelector('[data-copy-contact="phone"]').dataset.contactValue, '0507-1386-2171');
-    for (const href of ['https://haeumkorean.me/', 'https://www.instagram.com/haeumkorean/', 'https://www.threads.com/@haeumkorean', 'https://www.youtube.com/@studio_mama']) assert.ok(drawer.querySelector('a[href="' + href + '"]'));
+    for (const href of ['https://haeonkorean.com/', 'https://haeum.haeonkorean.com/', 'https://www.instagram.com/haeumkorean/', 'https://www.threads.com/@haeumkorean', 'https://www.youtube.com/@studio_mama']) assert.ok(drawer.querySelector('a[href="' + href + '"]'));
     assert.equal(drawer.querySelector('a[href*="linkedin.com"]').getAttribute('href'), 'https://www.linkedin.com/in/해원-하-38a18a323/');
     assert.equal(drawer.querySelector('a[href*="github.com"]').getAttribute('href'), 'https://github.com/jasujung99');
     assert.equal(drawer.querySelector('a[href*="reddit.com"]').getAttribute('href'), 'https://www.reddit.com/user/haeumkorean/');

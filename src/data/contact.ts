@@ -1,7 +1,8 @@
 export const contact = {
   email: 'haeumkorean@gmail.com',
   phone: '0507-1386-2171',
-  website: 'https://haeumkorean.me/',
+  website: 'https://haeum.haeonkorean.com/',
+  haeonWebsite: 'https://haeonkorean.com/',
   handle: 'haeumkorean',
   instagram: 'https://www.instagram.com/haeumkorean/',
   threads: 'https://www.threads.com/@haeumkorean',
