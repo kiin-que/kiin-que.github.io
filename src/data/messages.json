@@ -299,5 +299,22 @@
   "projectFeatures": ["주요 작업", "Supported work"],
   "viewOnAgensi": ["Agensi에서 보기","View on Agensi"],
   "projectPreviewCaption": ["공개 예제 · 편집 가능한 한글 문서로 만든 독서모임 포스터","Public example · a book club poster built as an editable Hancom Hangul document"],
-  "projectSource": ["출처 ·", "Source ·"]
+  "projectSource": ["출처 ·", "Source ·"],
+  "now": ["지금", "Now"],
+  "nowTitle": ["지금 하는 일", "In the making"],
+  "nowIntro": [
+    "물음표들에 올린 것은 이미 남긴 기록입니다. 여기는 아직 작업 중이거나, 구상만 하고 있는 일입니다.",
+    "The questions above are records already kept. Here are things still being made, or only imagined so far."
+  ],
+  "nowSample": [
+    "아래는 자리를 보여 주는 샘플입니다.",
+    "These entries are samples, standing in for the real list."
+  ],
+  "nowEmpty": [
+    "아직 적어 둔 일이 없습니다.",
+    "Nothing is written here yet."
+  ],
+  "statusMaking": ["작업중", "In progress"],
+  "statusImagining": ["구상중", "Imagining"],
+  "projectExample": ["예시", "Example"]
 }

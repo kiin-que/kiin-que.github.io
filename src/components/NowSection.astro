@@ -1,0 +1,28 @@
+---
+import { getProjects, projectsAreSamples } from '../data/projects';
+import { translate } from '../lib/i18n';
+import type { Language } from '../lib/i18n';
+const { lang } = Astro.props as { lang: Language };
+const t = (key: string) => translate(lang, key);
+const projects = getProjects(lang);
+const samples = projectsAreSamples();
+---
+<section id="now" class="now-section" aria-labelledby="now-title">
+  <header class="section-heading">
+    <h2 id="now-title" data-i18n="nowTitle">{t('nowTitle')}</h2>
+    <svg class="section-divider" viewBox="0 0 240 40" aria-hidden="true"><path d="M12 11C72 36 171 32 228 10" pathLength="1" /></svg>
+    <p data-i18n="nowIntro">{t('nowIntro')}</p>
+    {samples && <p class="now-sample-note section-note" data-i18n="nowSample">{t('nowSample')}</p>}
+  </header>
+  {projects.length === 0 ? <p class="now-empty" data-i18n="nowEmpty">{t('nowEmpty')}</p> : <ul class="now-list">
+    {projects.map(project => <li class="now-item">
+      <p class="now-meta">
+        <span class="now-status" data-i18n={project.status === 'making' ? 'statusMaking' : 'statusImagining'}>{project.statusLabel}</span>
+        {project.example && <span class="now-example" data-i18n="projectExample">{t('projectExample')}</span>}
+      </p>
+      <h3 class="now-title">{project.title}</h3>
+      <p class="now-summary">{project.summary}</p>
+      {project.link && <a class="now-link u-grow" href={project.link.href} target="_blank" rel="noopener noreferrer">{project.link.label} <span aria-hidden="true">↗</span></a>}
+    </li>)}
+  </ul>}
+</section>

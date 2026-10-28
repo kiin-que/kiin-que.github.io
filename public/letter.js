@@ -151,6 +151,7 @@
     const scenes = [
       { root: document.querySelector('#letter'), selector: '.letter-body p, .letter-thanks' },
       { root: document.querySelector('#writing'), selector: '.section-heading, .writing-filters, .writing-list' },
+      { root: document.querySelector('#now'), selector: '.section-heading, .now-list, .now-empty' },
       { root: document.querySelector('#connect'), selector: '.section-heading, .contact-links' }
     ].filter(scene => scene.root);
     const revealScene = root => {
@@ -182,5 +183,5 @@
     });
   }
   const links=[...document.querySelectorAll('.letter-nav a[href^="#"]')];
-  if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){for(const link of links){const active=link.hash==='#'+entry.target.id;link.classList.toggle('u-on',active);if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current')}}},{rootMargin:'-15% 0px -60% 0px',threshold:0});document.querySelectorAll('#letter,#writing,#connect').forEach(section=>observer.observe(section))}
+  if('IntersectionObserver'in window){const observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){for(const link of links){const active=link.hash==='#'+entry.target.id;link.classList.toggle('u-on',active);if(active)link.setAttribute('aria-current','location');else link.removeAttribute('aria-current')}}},{rootMargin:'-15% 0px -60% 0px',threshold:0});document.querySelectorAll('#letter,#writing,#now,#connect').forEach(section=>observer.observe(section))}
 })();

@@ -139,6 +139,32 @@ for (const name of pages) {
     assert.equal(drawer.querySelector('a[href*="github.com"]').getAttribute('href'), 'https://github.com/jasujung99');
     assert.equal(drawer.querySelector('a[href*="reddit.com"]').getAttribute('href'), 'https://www.reddit.com/user/haeumkorean/');
     const messages = JSON.parse(document.querySelector('#page-translations').textContent);
+    assert.deepEqual([...document.querySelectorAll('.letter-nav a')].map(link => link.textContent.trim()), en
+      ? ['Letter', 'Questions', 'Now', 'Connect ↗', '한국어']
+      : ['편지', '물음표들', '지금', '연결 ↗', 'English']);
+    const projectItems = JSON.parse(fs.readFileSync('src/data/projects.json', 'utf8')).items;
+    const nowItems = [...document.querySelectorAll('#now .now-item')];
+    assert.equal(document.querySelector('#now-title').textContent, messages.nowTitle);
+    assert.equal(document.querySelector('#now [data-i18n="nowIntro"]').textContent, messages.nowIntro);
+    assert.equal(nowItems.length, projectItems.length, 'In-progress list should follow projects.json');
+    const allSamples = projectItems.length > 0 && projectItems.every(item => item.example === true);
+    assert.equal(document.querySelector('#now .now-sample-note')?.textContent ?? '', allSamples ? messages.nowSample : '');
+    assert.equal(document.querySelector('#now .now-empty')?.textContent ?? '', projectItems.length ? '' : messages.nowEmpty);
+    projectItems.forEach((item, index) => {
+      const node = nowItems[index];
+      const column = en ? 1 : 0;
+      assert.equal(node.querySelector('.now-status').textContent, messages[item.status === 'making' ? 'statusMaking' : 'statusImagining']);
+      assert.equal(node.querySelector('.now-title').textContent, item.title[column]);
+      assert.equal(node.querySelector('.now-summary').textContent, item.summary[column]);
+      assert.equal(node.querySelector('.now-example')?.textContent ?? '', item.example === true ? messages.projectExample : '');
+      const projectLink = node.querySelector('a');
+      if (item.link) {
+        assert.equal(projectLink.getAttribute('href'), new URL(item.link.href).href);
+        assert.equal(projectLink.getAttribute('target'), '_blank');
+        assert.equal(projectLink.getAttribute('rel'), 'noopener noreferrer');
+        assert.equal(projectLink.textContent.replace(/\s+/g, ' ').trim(), item.link.label[column] + ' ↗');
+      } else assert.equal(projectLink, null, 'Do not invent a link for an entry without one');
+    });
     assert.equal(document.querySelectorAll('.writing-entry').length, entryCount);
     const dates = [...document.querySelectorAll('.writing-entry')].map(entry => entry.querySelector('time')?.getAttribute('datetime') ?? '');
     assert.deepEqual(dates, [...dates].sort((a, b) => b.localeCompare(a)), 'Work list should be newest first, with undated entries last');
@@ -214,8 +240,8 @@ for (const name of pages) {
       assert.equal(document.querySelector('[data-writing-filter="' + restored + '"]').getAttribute('aria-pressed'), 'true');
       for (const entry of document.querySelectorAll('.writing-entry')) assert.equal(entry.hidden, entry.dataset.writingCategory !== restored);
     }
-    assert.equal(document.querySelectorAll('.scroll-line').length, 2);
-    observers[0].callback(observed.slice(0, 3).map(target => ({target, isIntersecting: true})));
+    assert.equal(document.querySelectorAll('.scroll-line').length, 3);
+    observers[0].callback(observed.slice(0, 4).map(target => ({target, isIntersecting: true})));
     assert.equal(document.querySelectorAll('.scroll-reveal:not(.is-visible)').length, 0);
   }
 }

@@ -5,6 +5,7 @@ import ContactLinks from './ContactLinks.astro';
 import ContactDrawer from './ContactDrawer.astro';
 import { getWorks } from '../data/works';
 import Greeting from './Greeting.astro';
+import NowSection from './NowSection.astro';
 import { translate, withBase } from '../lib/i18n';
 import { LIKE_ENDPOINT } from '../data/counter';
 const { lang } = Astro.props;
@@ -56,6 +57,7 @@ const countWorks = (category: string) => publishedWorks.filter(work => category 
       <WritingList lang={lang} />
       <p class="writing-empty" role="status" hidden data-i18n="empty">{t("empty")}</p>
     </section>
+    <NowSection lang={lang} />
 <section id="connect" class="connect-section" aria-labelledby="connect-title">
       <header class="section-heading"><h2 id="connect-title" data-i18n="connectTitle">{t("connectTitle")}</h2>
         <svg class="section-divider" viewBox="0 0 240 40" aria-hidden="true"><path d="M12 11C72 36 171 32 228 10" pathLength="1" /></svg>

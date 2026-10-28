@@ -1,0 +1,27 @@
+{
+  "note": "이 파일의 items만 고치면 홈의 '지금' 칸이 바뀝니다. 적힌 순서대로 보입니다. status는 making(작업중) 또는 imagining(구상중)입니다. title과 summary는 [\"한국어\", \"English\"]로 두 언어를 모두 적습니다. link는 세상에 공개해도 되는 https 주소만 넣습니다. 링크가 없으면 link를 통째로 빼세요. 비공개 저장소의 이름, 설명, 주소는 적지 마세요. example이 true이면 그 줄에 '예시'가 붙습니다. 실제 항목에서는 example을 빼세요. 항목이 모두 예시일 때만, 샘플이라는 안내 문장이 페이지에 보입니다.",
+  "items": [
+    {
+      "status": "making",
+      "example": true,
+      "title": ["교실 카드", "Classroom cards"],
+      "summary": ["수업 전에 단어와 문장을 카드로 모아 두는 작은 도구를 만들고 있습니다.", "A small tool for gathering words and sentences onto cards before class."],
+      "link": {
+        "href": "https://example.com/",
+        "label": ["샘플 페이지", "Sample page"]
+      }
+    },
+    {
+      "status": "making",
+      "example": true,
+      "title": ["말소리 연습", "Speech-sound practice"],
+      "summary": ["학습자가 낸 소리를 듣고, 짧게 적어 보는 연습을 손보고 있습니다. 공개할 주소는 아직 없습니다.", "A practice for listening to a learner's sound and writing a short note. There is no public address yet."]
+    },
+    {
+      "status": "imagining",
+      "example": true,
+      "title": ["함께 읽는 자리", "Reading together"],
+      "summary": ["여럿이 한 글을 읽고 물음을 나누는 모임을 어떻게 열지, 아직 구상만 하고 있습니다.", "Still only imagining how people might read one text and share their questions."]
+    }
+  ]
+}
