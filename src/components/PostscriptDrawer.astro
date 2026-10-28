@@ -14,16 +14,27 @@ const t = (key: string) => translate(lang, key);
     <button type="button" class="contact-drawer-close postscript-close" data-close-postscript aria-label={t('close')} autofocus><span aria-hidden="true">×</span></button>
   </div>
   <p id="postscript-subtitle" class="postscript-subtitle">{t('postscriptSubtitle')}</p>
-  <div class="postscript-feedback" role="status" aria-live="polite" aria-atomic="true" data-message={t('postscriptAcknowledged')}></div>
+  <div class="postscript-feedback sr-only" role="status" aria-live="polite" aria-atomic="true" data-message={t('postscriptAcknowledged')}></div>
   <ul class="postscript-list">
     {items.map(item => <li>
       <button type="button" class="postscript-item" data-project-id={item.slug}>
-        <span class="postscript-stage">· {item.stageLabel}</span>
+        <span class="postscript-stage">{item.stageLabel}</span>
         <span class="postscript-item-title">{item.title}</span>
         <time datetime={item.created}>{item.dateLabel}</time>
-        <svg class="postscript-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" pathLength="1" /></svg>
       </button>
     </li>)}
   </ul>
+  <template data-postscript-pop>
+    <span class="postscript-pop" aria-hidden="true">
+      <svg class="postscript-pop-apricot" width="30" height="30" viewBox="0 0 28 28">
+        <path d="M14 8.2C17.6 5.6 24.6 7.4 24.6 15C24.6 21.6 19.6 25.6 14 25.6C8.4 25.6 3.4 21.6 3.4 15C3.4 7.4 10.4 5.6 14 8.2Z" fill="#E3A07A" />
+        <ellipse cx="9.4" cy="13.2" rx="2.3" ry="1.4" transform="rotate(-32 9.4 13.2)" fill="#FDF9F3" />
+        <path d="M14 8.2C17.6 5.6 24.6 7.4 24.6 15C24.6 21.6 19.6 25.6 14 25.6C8.4 25.6 3.4 21.6 3.4 15C3.4 7.4 10.4 5.6 14 8.2Z" fill="none" stroke="#3B2B23" stroke-width="1.2" stroke-linejoin="round" />
+        <path d="M14 9C12.6 12.6 12.7 17.6 14.2 22.6" fill="none" stroke="#3B2B23" stroke-width="0.9" stroke-linecap="round" opacity="0.5" />
+        <path d="M14 8.2C14.2 6.6 14.6 5.4 15.4 4.4" fill="none" stroke="#3B2B23" stroke-width="1.2" stroke-linecap="round" />
+        <path d="M15.1 4.9C17 2.6 20.6 2.4 22.6 3.8C21 6.2 17.6 6.8 15.1 4.9Z" fill="#FDF9F3" stroke="#3B2B23" stroke-width="1.1" stroke-linejoin="round" />
+      </svg>
+    </span>
+  </template>
   <p class="postscript-date"><time data-postscript-today data-lang={lang}></time></p>
 </dialog>

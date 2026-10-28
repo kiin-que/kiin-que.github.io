@@ -5,6 +5,7 @@
   document.documentElement.classList.add('postscript-ready');
   const feedback = drawer.querySelector('.postscript-feedback');
   const items = [...drawer.querySelectorAll('.postscript-item')];
+  const popTemplate = drawer.querySelector('[data-postscript-pop]');
   const today = drawer.querySelector('[data-postscript-today]');
   function updateToday() {
     const now = new Date();
@@ -26,14 +27,11 @@
   });
   let overflow = '';
   let revealTimer;
-  let dismissTimer;
   let clearTimer;
   function reset() {
     clearTimeout(revealTimer);
-    clearTimeout(dismissTimer);
     clearTimeout(clearTimer);
-    items.forEach(item => item.classList.remove('is-acknowledged'));
-    feedback.classList.remove('is-visible');
+    drawer.querySelectorAll('.postscript-pop').forEach(pop => pop.remove());
     feedback.textContent = '';
   }
   trigger.addEventListener('click', () => {
@@ -57,19 +55,24 @@
     trigger.setAttribute('aria-expanded', 'false');
     trigger.focus({preventScroll: true});
   });
-  items.forEach(item => item.addEventListener('click', () => {
+  items.forEach(item => item.addEventListener('click', event => {
     reset();
-    // Restart the small acknowledgement on every click; no completion or counter is saved.
-    void item.offsetWidth;
-    item.classList.add('is-acknowledged');
-    revealTimer = setTimeout(() => {
-      feedback.textContent = feedback.dataset.message;
-      feedback.classList.add('is-visible');
-    }, 20);
-    dismissTimer = setTimeout(() => {
-      item.classList.remove('is-acknowledged');
-      feedback.classList.remove('is-visible');
-      clearTimer = setTimeout(() => { feedback.textContent = ''; }, 200);
-    }, 1700);
+    // Pop up above the pointer; keyboard clicks have no pointer, so use the title instead.
+    const frame = drawer.getBoundingClientRect();
+    const title = item.querySelector('.postscript-item-title').getBoundingClientRect();
+    const fromPointer = event.detail > 0;
+    const x = fromPointer ? event.clientX : title.left + title.width / 2;
+    const y = fromPointer ? event.clientY - 8 : title.top;
+    const pop = popTemplate.content.firstElementChild.cloneNode(true);
+    drawer.append(pop);
+    const half = pop.offsetWidth / 2;
+    const edge = 8;
+    pop.style.left = Math.min(Math.max(x - frame.left, half + edge), drawer.clientWidth - half - edge) + 'px';
+    pop.style.top = Math.max(y - frame.top + drawer.scrollTop, pop.offsetHeight * 1.6) + 'px';
+    pop.addEventListener('animationend', animation => {
+      if (animation.target === pop) pop.remove();
+    });
+    revealTimer = setTimeout(() => { feedback.textContent = feedback.dataset.message; }, 20);
+    clearTimer = setTimeout(() => { feedback.textContent = ''; }, 2600);
   }));
 })();

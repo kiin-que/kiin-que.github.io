@@ -134,13 +134,14 @@ for (const name of pages) {
       assert.equal(postscriptTrigger.getAttribute('aria-controls'), postscript.id);
       assert.equal(postscriptTrigger.getAttribute('aria-expanded'), 'false');
       assert.equal(postscript.querySelector('.postscript-feedback').getAttribute('role'), 'status');
+      assert.equal(postscript.querySelector('.postscript-feedback').dataset.message, interfaceMessages.postscriptAcknowledged[en ? 1 : 0]);
+      assert.ok(postscript.querySelector('template[data-postscript-pop]').content.querySelector('.postscript-pop[aria-hidden="true"] .postscript-pop-apricot'));
       const rows = [...postscript.querySelectorAll('.postscript-item')];
       assert.equal(rows.length, pending.length);
       pending.forEach((item, index) => {
         assert.equal(rows[index].tagName.toLowerCase(), 'button');
         assert.equal(rows[index].querySelector('.postscript-item-title').textContent, en ? item.title_en : item.title_ko);
         assert.equal(rows[index].querySelector('time').getAttribute('datetime'), item.created);
-        assert.ok(rows[index].querySelector('.postscript-check[aria-hidden="true"]'));
         assert.ok(!rows[index].hasAttribute('aria-pressed'), 'Acknowledgement is not a persistent completion state');
       });
     }
