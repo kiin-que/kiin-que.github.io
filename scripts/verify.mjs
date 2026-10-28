@@ -130,6 +130,7 @@ for (const name of pages) {
     if (pending.length) {
       assert.equal(postscript.tagName.toLowerCase(), 'dialog');
       assert.equal(postscript.querySelector('.postscript-title').textContent, interfaceMessages.postscriptTitle[en ? 1 : 0]);
+      assert.equal(postscript.querySelector('.postscript-subtitle').textContent, interfaceMessages.postscriptSubtitle[en ? 1 : 0]);
       assert.equal(postscriptTrigger.getAttribute('aria-controls'), postscript.id);
       assert.equal(postscriptTrigger.getAttribute('aria-expanded'), 'false');
       assert.equal(postscript.querySelector('.postscript-feedback').getAttribute('role'), 'status');

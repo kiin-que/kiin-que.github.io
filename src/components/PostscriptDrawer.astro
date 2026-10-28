@@ -8,11 +8,12 @@ interface Props {
 const {lang, items} = Astro.props;
 const t = (key: string) => translate(lang, key);
 ---
-<dialog id="postscript-drawer" class="postscript-drawer" aria-labelledby="postscript-title">
-  <button type="button" class="postscript-close" data-close-postscript aria-label={t('close')}>
-    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
-  </button>
-  <h2 id="postscript-title" class="postscript-title">{t('postscriptTitle')}</h2>
+<dialog id="postscript-drawer" class="contact-drawer postscript-drawer" aria-labelledby="postscript-title" aria-describedby="postscript-subtitle">
+  <div class="contact-drawer-header">
+    <h2 id="postscript-title" class="postscript-title">{t('postscriptTitle')}</h2>
+    <button type="button" class="contact-drawer-close postscript-close" data-close-postscript aria-label={t('close')} autofocus><span aria-hidden="true">×</span></button>
+  </div>
+  <p id="postscript-subtitle" class="postscript-subtitle">{t('postscriptSubtitle')}</p>
   <div class="postscript-feedback" role="status" aria-live="polite" aria-atomic="true" data-message={t('postscriptAcknowledged')}></div>
   <ul class="postscript-list">
     {items.map(item => <li>
