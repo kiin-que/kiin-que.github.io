@@ -67,6 +67,7 @@ const problems = [];
 const check = (fn) => { try { fn(); } catch (error) { problems.push(error.message); } };
 const notes = new Map();
 const works = [];
+const inProgress = [];
 const images = new Map(files.filter(file => file.path.startsWith('works/') && IMAGE.test(file.path)).map(file => [file.path.slice(6), file]));
 
 for (const file of files) {
@@ -94,6 +95,17 @@ for (const file of files) {
     const data = frontmatter(file.data.toString('utf8'), file.path);
     if (data.visibility === 'private') throw new Error(file.path + ': marked private');
     const kind = data.kind ?? 'image';
+    if (kind === 'in-progress') {
+      need(data, ['slug', 'category', 'stage', 'created', 'title_ko', 'title_en'], file.path);
+      if (data.slug !== slug) throw new Error(file.path + ': slug must match the file name');
+      if (!CATEGORIES.includes(data.category)) throw new Error(file.path + ': unknown category');
+      if (!['idea', 'sketch', 'making'].includes(data.stage)) throw new Error(file.path + ': unknown project stage');
+      if (!DATE.test(data.created)) throw new Error(file.path + ': created must be YYYY-MM-DD or YYYY-MM');
+      for (const key of ['title_ko', 'title_en']) if (typeof data[key] !== 'string' || !data[key].trim()) throw new Error(file.path + ': invalid ' + key);
+      if (data.order !== undefined && (!Number.isInteger(data.order) || data.order < 0)) throw new Error(file.path + ': order must be a non-negative integer');
+      inProgress.push(data);
+      return;
+    }
     if (!['image', 'project'].includes(kind)) throw new Error(file.path + ': unknown work kind');
     need(data, ['slug', 'category', 'image', 'width', 'height', 'alt_ko', 'alt_en'], file.path);
     if (kind === 'image') need(data, ['created', 'tool'], file.path);
@@ -167,8 +179,9 @@ for (const work of works) {
   }
 }
 fs.writeFileSync(path.join(OUT, 'works.json'), JSON.stringify(works.map(work => ({ id: work.slug, ...work })), null, 2));
+fs.writeFileSync(path.join(OUT, 'in-progress.json'), JSON.stringify(inProgress.map(work => ({id: work.slug, ...work})), null, 2));
 fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify({
   notes: [...notes].map(([slug, entry]) => ({ slug, ko: entry.ko.data, en: entry.en.data })),
-  works,
+  works, inProgress,
 }, null, 2));
 console.log('fetch-publish: ' + notes.size + ' note(s), ' + works.length + ' visual work(s) from ' + (process.env.PUBLISH_URL ? 'Apps Script' : process.env.PUBLISH_DIR));

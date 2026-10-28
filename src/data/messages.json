@@ -299,5 +299,12 @@
   "projectFeatures": ["주요 작업", "Supported work"],
   "viewOnAgensi": ["Agensi에서 보기","View on Agensi"],
   "projectPreviewCaption": ["공개 예제 · 편집 가능한 한글 문서로 만든 독서모임 포스터","Public example · a book club poster built as an editable Hancom Hangul document"],
-  "projectSource": ["출처 ·", "Source ·"]
+  "projectSource": ["출처 ·", "Source ·"],
+  "postscriptTitle": ["추신", "P.S."],
+  "postscriptSubtitle": ["오늘도 걷는 중..", "Still walking.."],
+  "postscriptOpen": ["추신 · 진행 중인 프로젝트 보기", "Postscript · projects in progress"],
+  "postscriptAcknowledged": ["그렇군요", "I see"],
+  "postscriptIdea": ["구상", "Planning"],
+  "postscriptSketch": ["스케치", "Sketching"],
+  "postscriptMaking": ["만드는 중", "In progress"]
 }

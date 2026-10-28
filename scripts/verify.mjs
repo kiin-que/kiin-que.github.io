@@ -122,6 +122,28 @@ for (const name of pages) {
     assert.equal(document.querySelectorAll('.letter-body strong[lang="ko"]').length, en ? 2 : 0);
     assert.ok(document.querySelector('.letter-body').textContent.includes(en ? 'With the posture of a question mark' : '물음표를 닮은 자세'));
     assert.equal(document.querySelector('.letter-nav a[href="#connect"]').textContent.trim(), en ? 'Connect ↗' : '연결 ↗');
+    const pending = [...(manifest.inProgress ?? [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0) || a.slug.localeCompare(b.slug));
+    const postscript = document.querySelector('#postscript-drawer');
+    const postscriptTrigger = document.querySelector('[data-open-postscript]');
+    assert.equal(Boolean(postscript), pending.length > 0);
+    assert.equal(Boolean(postscriptTrigger), pending.length > 0);
+    if (pending.length) {
+      assert.equal(postscript.tagName.toLowerCase(), 'dialog');
+      assert.equal(postscript.querySelector('.postscript-title').textContent, interfaceMessages.postscriptTitle[en ? 1 : 0]);
+      assert.equal(postscript.querySelector('.postscript-subtitle').textContent, interfaceMessages.postscriptSubtitle[en ? 1 : 0]);
+      assert.equal(postscriptTrigger.getAttribute('aria-controls'), postscript.id);
+      assert.equal(postscriptTrigger.getAttribute('aria-expanded'), 'false');
+      assert.equal(postscript.querySelector('.postscript-feedback').getAttribute('role'), 'status');
+      const rows = [...postscript.querySelectorAll('.postscript-item')];
+      assert.equal(rows.length, pending.length);
+      pending.forEach((item, index) => {
+        assert.equal(rows[index].tagName.toLowerCase(), 'button');
+        assert.equal(rows[index].querySelector('.postscript-item-title').textContent, en ? item.title_en : item.title_ko);
+        assert.equal(rows[index].querySelector('time').getAttribute('datetime'), item.created);
+        assert.ok(rows[index].querySelector('.postscript-check[aria-hidden="true"]'));
+        assert.ok(!rows[index].hasAttribute('aria-pressed'), 'Acknowledgement is not a persistent completion state');
+      });
+    }
     const drawer = document.querySelector('#contact-drawer');
     const trigger = document.querySelector('[data-open-contact]');
     assert.equal(drawer.tagName.toLowerCase(), 'dialog');
