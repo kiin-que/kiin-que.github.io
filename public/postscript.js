@@ -5,6 +5,25 @@
   document.documentElement.classList.add('postscript-ready');
   const feedback = drawer.querySelector('.postscript-feedback');
   const items = [...drawer.querySelectorAll('.postscript-item')];
+  const today = drawer.querySelector('[data-postscript-today]');
+  function updateToday() {
+    const now = new Date();
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Seoul', year: 'numeric', month: '2-digit', day: '2-digit'
+    }).formatToParts(now);
+    const part = type => parts.find(value => value.type === type).value;
+    today.dateTime = `${part('year')}-${part('month')}-${part('day')}`;
+    today.textContent = today.dataset.lang === 'ko'
+      ? `${part('year')}. ${part('month')}. ${part('day')}.`
+      : new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Asia/Seoul', day: 'numeric', month: 'long', year: 'numeric'
+      }).format(now);
+  }
+  updateToday();
+  setInterval(updateToday, 30000);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) updateToday();
+  });
   let overflow = '';
   let revealTimer;
   let dismissTimer;
@@ -20,6 +39,7 @@
   trigger.addEventListener('click', () => {
     if (drawer.open) return;
     reset();
+    updateToday();
     overflow = document.documentElement.style.overflow;
     document.documentElement.style.overflow = 'hidden';
     drawer.showModal();

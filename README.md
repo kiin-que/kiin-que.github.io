@@ -67,7 +67,9 @@ pnpm preview
 
 원본은 `archive/publish/works/{slug}.md`의 앞머리에 둡니다. `kind: "in-progress"`, `slug`, `category`, `created`, `stage`, `title_ko/en`이 필수이며, `stage`는 `idea`·`sketch`·`making` 중 하나입니다. `order`는 선택한 0 이상의 정수로, 작은 값이 먼저 나옵니다. 이 자료는 완성작 수·작업 상세 URL·사이트맵에 포함하지 않습니다. 빌드는 `.publish/in-progress.json`을 생성하고, 실제 내용은 레포에 커밋하지 않습니다.
 
-로컬 시안은 발행 폴더를 복사한 임시 입력에 목업 파일만 추가한 뒤 그 폴더를 `PUBLISH_DIR`로 지정해 확인합니다. 목업은 실제 Drive 발행 원본에 넣지 않습니다. 기존 Apps Script가 works의 Markdown을 읽는 구조를 그대로 사용합니다.
+로컬 시안은 발행 폴더를 복사한 임시 입력에 목업 파일만 추가한 뒤 그 폴더를 `PUBLISH_DIR`로 지정해 확인합니다. 목업도 사용자가 발행을 승인한 경우에는 실제 Drive 발행 폴더에 등록할 수 있습니다. 기존 Apps Script가 works의 Markdown을 읽는 구조를 그대로 사용합니다.
+
+목록 아래 날짜는 브라우저에서 한국 시간(Asia/Seoul)의 오늘 날짜로 표시합니다. 한국어는 YYYY. MM. DD., 영어는 D Month YYYY 형식이며 재배포 없이 갱신됩니다.
 
 ### 앱스 스크립트 (apps-script/)
 
