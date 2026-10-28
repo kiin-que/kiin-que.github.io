@@ -1,0 +1,27 @@
+---
+import { translate } from '../lib/i18n';
+import type { Language } from '../lib/i18n';
+interface Props {
+  lang: Language;
+  items: {slug: string; title: string; stageLabel: string; created: string; dateLabel: string}[];
+}
+const {lang, items} = Astro.props;
+const t = (key: string) => translate(lang, key);
+---
+<dialog id="postscript-drawer" class="postscript-drawer" aria-labelledby="postscript-title">
+  <button type="button" class="postscript-close" data-close-postscript aria-label={t('close')}>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18" /></svg>
+  </button>
+  <h2 id="postscript-title" class="postscript-title">{t('postscriptTitle')}</h2>
+  <div class="postscript-feedback" role="status" aria-live="polite" aria-atomic="true" data-message={t('postscriptAcknowledged')}></div>
+  <ul class="postscript-list">
+    {items.map(item => <li>
+      <button type="button" class="postscript-item" data-project-id={item.slug}>
+        <span class="postscript-stage">· {item.stageLabel}</span>
+        <span class="postscript-item-title">{item.title}</span>
+        <time datetime={item.created}>{item.dateLabel}</time>
+        <svg class="postscript-check" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4L19 6" pathLength="1" /></svg>
+      </button>
+    </li>)}
+  </ul>
+</dialog>

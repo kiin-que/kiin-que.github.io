@@ -3,6 +3,8 @@ import PageLayout from '../layouts/PageLayout.astro';
 import WritingList from './WritingList.astro';
 import ContactLinks from './ContactLinks.astro';
 import ContactDrawer from './ContactDrawer.astro';
+import PostscriptDrawer from './PostscriptDrawer.astro';
+import { getInProgress } from '../data/in-progress';
 import { getWorks } from '../data/works';
 import Greeting from './Greeting.astro';
 import { translate, withBase } from '../lib/i18n';
@@ -10,10 +12,11 @@ import { LIKE_ENDPOINT } from '../data/counter';
 const { lang } = Astro.props;
 const t = (key: string) => translate(lang, key);
 const publishedWorks = await getWorks(lang);
+const inProgress = await getInProgress(lang);
 const filters = ['all', 'language', 'thought', 'experiment'];
 const countWorks = (category: string) => publishedWorks.filter(work => category === 'all' || work.category === category).length;
 ---
-<PageLayout lang={lang} title={t('homeTitle')} description={t('homeDescription')}>
+<PageLayout lang={lang} title={t('homeTitle')} description={t('homeDescription')} hasPostscript={inProgress.length > 0}>
 <main id="main">
     <section class="letter-hero" aria-label={t("portraitLabel")} data-i18n-aria-label="portraitLabel">
       <figure class="hero-portrait"><img src={withBase("assets/portrait-soft.webp")} width="704" height="880" alt={t("portraitAlt")} data-i18n-alt="portraitAlt" fetchpriority="high" decoding="async"></figure>
@@ -64,4 +67,5 @@ const countWorks = (category: string) => publishedWorks.filter(work => category 
     </section>
   </main>
   <ContactDrawer lang={lang} />
+  {inProgress.length > 0 && <PostscriptDrawer lang={lang} items={inProgress} />}
 </PageLayout>

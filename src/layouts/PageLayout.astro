@@ -4,9 +4,10 @@ import SiteFooter from '../components/SiteFooter.astro';
 import { withBase, localPath, clientMessages } from '../lib/i18n';
 import { asset } from '../lib/assets';
 import type { Language } from '../lib/i18n';
-const {lang, title, description, article = false, slug = '', published, artwork, project} = Astro.props as {
+const {lang, title, description, article = false, slug = '', published, artwork, project, hasPostscript = false} = Astro.props as {
   lang: Language; title: string; description: string; article?: boolean; slug?: string; published?: string;
   project?: {image: string};
+  hasPostscript?: boolean;
   artwork?: {image: string; created: string; tool: string; mime: string};
 };
 const detailSection = artwork || project ? 'works' : 'writing';
@@ -54,13 +55,15 @@ const json = (value: unknown) => JSON.stringify(value).replace(/</g, '\u003c');
   <link rel="icon" href={withBase('favicon.svg')} type="image/svg+xml" />
   {['common.css', 'letter.css', 'reading.css', 'language.css'].map(file => <link rel="stylesheet" href={asset(file)} />)}
   {article && <link rel="stylesheet" href={asset('detail.css')} />}
+  {hasPostscript && <link rel="stylesheet" href={asset('postscript.css')} />}
   <script type="application/ld+json" set:html={json(schema)} />
 </head>
 <body class={article ? 'reading-page' : 'letter-page'}>
-  <Header lang={lang} article={article} slug={slug} detailSection={detailSection} />
+  <Header lang={lang} article={article} slug={slug} detailSection={detailSection} hasPostscript={hasPostscript} />
   <slot />
   <SiteFooter lang={lang} article={article} />
   {!article && <><div id="letter-toast" class="letter-toast" role="status" hidden></div><script id="page-translations" type="application/json" set:html={json(clientMessages(lang))} /><script is:inline src={asset('letter.js')} defer></script></>}
+  {hasPostscript && <script is:inline src={asset('postscript.js')} defer></script>}
   <script>
     document.querySelectorAll<HTMLAnchorElement>('[data-language-link]').forEach(link => {
       link.addEventListener('click', () => { if (location.hash) link.hash = location.hash; });

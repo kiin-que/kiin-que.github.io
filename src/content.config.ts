@@ -55,4 +55,18 @@ const works = defineCollection({
   }),
 });
 
-export const collections = { notes, works };
+const inProgress = defineCollection({
+  loader: file('./.publish/in-progress.json'),
+  schema: z.object({
+    slug: z.string(),
+    category,
+    kind: z.literal('in-progress'),
+    stage: z.enum(['idea', 'sketch', 'making']),
+    created: z.string(),
+    title_ko: z.string(),
+    title_en: z.string(),
+    order: z.number().int().nonnegative().default(0),
+  }),
+});
+
+export const collections = { notes, works, inProgress };

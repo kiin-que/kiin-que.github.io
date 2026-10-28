@@ -1,0 +1,47 @@
+.letter-page .letter-header.has-postscript { flex-direction: row; justify-content: space-between; align-items: center; gap: 16px; }
+.postscript-trigger { display: none; flex: none; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; border-radius: 12px; background: var(--surface); color: var(--ink); transition: background-color 180ms ease; }
+.postscript-ready .postscript-trigger { display: grid; }
+.postscript-trigger:hover, .postscript-trigger[aria-expanded="true"] { background: var(--sky); }
+.postscript-trigger svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+.postscript-drawer { position: fixed; inset: 0; width: min(650px, 100%); max-width: none; height: 100%; height: 100dvh; max-height: none; margin: 0 auto 0 0; padding: 110px 36px 48px; border: 0; background: var(--paper); color: var(--ink); font: inherit; overflow-y: auto; overscroll-behavior: contain; }
+.postscript-drawer::backdrop { background: rgba(59, 43, 35, .23); }
+.postscript-drawer[open] { animation: postscript-drawer-in 260ms cubic-bezier(.22, 1, .36, 1); }
+.postscript-close { position: absolute; top: 23px; right: 24px; display: grid; place-items: center; width: 44px; height: 44px; border: 0; padding: 0; background: transparent; color: var(--muted); }
+.postscript-close svg { width: 19px; height: 19px; fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; }
+.postscript-title { margin: 0; font-family: "Gowun Dodum", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif; font-size: 17px; font-weight: 400; font-style: normal; line-height: 1.95; letter-spacing: -.01em; }
+.postscript-feedback { min-height: 34px; margin: 12px 0 5px; color: var(--muted); font-size: 13px; line-height: 1.8; opacity: 0; transform: translateY(3px); transition: opacity 180ms ease, transform 180ms ease; pointer-events: none; }
+.postscript-feedback.is-visible { opacity: 1; transform: translateY(0); }
+.postscript-list { list-style: none; padding: 0; margin: 0; }
+.postscript-list li { margin: 0; }
+.postscript-item { position: relative; display: grid; grid-template-columns: 64px minmax(0, 1fr) 71px; align-items: baseline; gap: 12px; width: 100%; min-height: 56px; padding: 10px 0; border: 0; background: transparent; color: inherit; font: inherit; text-align: left; }
+.postscript-stage, .postscript-item time { font-size: 12px; line-height: 1.8; color: var(--muted); font-style: normal; }
+.postscript-item time { text-align: right; white-space: nowrap; }
+.postscript-item-title { min-width: 0; padding-bottom: 4px; border-bottom: 1px dashed #d5b598; font-size: 16px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+.postscript-item:hover .postscript-item-title { color: var(--accent-strong); }
+.postscript-check { position: absolute; top: 15px; left: -23px; width: 17px; height: 17px; color: var(--accent-strong); opacity: 0; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; transition: opacity 180ms ease; pointer-events: none; }
+.postscript-check path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.postscript-item.is-acknowledged .postscript-check { opacity: 1; }
+.postscript-item.is-acknowledged .postscript-check path { animation: postscript-check-in 280ms cubic-bezier(.22, 1, .36, 1) forwards; }
+.lang-en .postscript-title { font-family: "Cormorant Garamond", "Gowun Batang", Georgia, serif; font-size: 22px; font-weight: 400; font-style: italic; line-height: 1.7; letter-spacing: .005em; }
+.lang-en .postscript-item { grid-template-columns: 76px minmax(0, 1fr) 74px; }
+.lang-en .postscript-item-title { font-family: var(--f-body); font-size: 15px; font-style: normal; line-height: 1.9; word-break: normal; }
+.lang-en .postscript-feedback, .lang-en .postscript-stage, .lang-en .postscript-item time { font-family: var(--f-body); }
+@keyframes postscript-drawer-in { from { transform: translateX(-100%); } to { transform: translateX(0); } }
+@keyframes postscript-check-in { to { stroke-dashoffset: 0; } }
+@media (max-width: 540px) {
+  .letter-page .letter-header.has-postscript { width: calc(100% - 40px); gap: 8px; }
+  .has-postscript .letter-nav { flex-wrap: wrap; justify-content: flex-end; min-width: 0; row-gap: 0; }
+  .has-postscript .letter-nav .u-pad { padding-inline: 5px; --u-inset: 5px; }
+  .has-postscript .letter-nav .lang-btn { padding-inline: 6px; }
+  .postscript-drawer { padding: 106px 28px 40px; }
+  .postscript-close { top: 20px; right: 18px; }
+  .postscript-item, .lang-en .postscript-item { grid-template-columns: 60px minmax(0, 1fr); gap: 2px 10px; min-height: 76px; padding: 13px 0; }
+  .postscript-item time { grid-column: 2; text-align: left; }
+  .postscript-check { top: 18px; left: -22px; width: 16px; height: 16px; }
+}
+@media (max-width: 360px) { .has-postscript .letter-nav { font-size: 13px; } .has-postscript .letter-nav .lang-btn { font-size: 21px; } }
+@media (prefers-reduced-motion: reduce) {
+  .postscript-trigger, .postscript-feedback, .postscript-check { transition: none; transform: none; }
+  .postscript-drawer[open], .postscript-item.is-acknowledged .postscript-check path { animation: none; }
+  .postscript-item.is-acknowledged .postscript-check path { stroke-dashoffset: 0; }
+}
