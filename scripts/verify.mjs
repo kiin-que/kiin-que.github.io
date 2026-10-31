@@ -150,7 +150,7 @@ for (const name of pages) {
     assert.equal(drawer.tagName.toLowerCase(), 'dialog');
     assert.equal(trigger.getAttribute('aria-controls'), drawer.id);
     assert.equal(trigger.getAttribute('aria-expanded'), 'false');
-    assert.equal(drawer.querySelectorAll('.contact-link').length, 10);
+    assert.equal(drawer.querySelectorAll('.contact-link').length, 11);
     assert.equal(drawer.querySelectorAll('small, .contact-trailing').length, 0);
     assert.equal(drawer.querySelector('[data-copy-contact="email"]').textContent.trim(), en ? 'Copy' : '복사');
     assert.equal(drawer.querySelector('[data-copy-contact="phone"]').textContent.trim(), en ? 'Copy' : '복사');
@@ -161,6 +161,11 @@ for (const name of pages) {
     assert.equal(drawer.querySelector('a[href*="linkedin.com"]').getAttribute('href'), 'https://www.linkedin.com/in/해원-하-38a18a323/');
     assert.equal(drawer.querySelector('a[href*="github.com"]').getAttribute('href'), 'https://github.com/jasujung99');
     assert.equal(drawer.querySelector('a[href*="reddit.com"]').getAttribute('href'), 'https://www.reddit.com/user/haeumkorean/');
+    for (const section of [drawer, document.querySelector('#connect')]) {
+      const blog = section.querySelector('a[href="https://blog.naver.com/haeumkorean"]');
+      assert.ok(blog, 'Naver Blog is linked in both contact areas');
+      assert.equal(blog.querySelector('.contact-label').textContent, interfaceMessages.naverBlog[en ? 1 : 0]);
+    }
     const messages = JSON.parse(document.querySelector('#page-translations').textContent);
     assert.equal(document.querySelectorAll('.writing-entry').length, entryCount);
     const dates = [...document.querySelectorAll('.writing-entry')].map(entry => entry.querySelector('time')?.getAttribute('datetime') ?? '');
