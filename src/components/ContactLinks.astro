@@ -1,6 +1,7 @@
 ---
 import { translate, withBase } from '../lib/i18n';
 import { contact } from '../data/contact';
+import { asset } from '../lib/assets';
 const {lang, variant = 'home'} = Astro.props;
 const t = (key: string) => translate(lang, key);
 const drawer = variant === 'drawer';
@@ -58,7 +59,7 @@ const drawer = variant === 'drawer';
     <span><span class="contact-label u-grow">GitHub</span>{!drawer && <small>@jasujung99</small>}</span>
   </a>
   <a class="contact-link" href={contact.naverBlog} target="_blank" rel="noopener noreferrer">
-    <svg class="icon" aria-hidden="true"><use href={withBase('assets/icons.svg#naver')} /></svg>
+    <svg class="icon" aria-hidden="true"><use href={asset('assets/icons.svg') + '#naver'} /></svg>
     <span><span class="contact-label u-grow">{t('naverBlog')}</span>{!drawer && <small>{contact.handle}</small>}</span>
   </a>
   <a class="contact-link" href={contact.reddit} target="_blank" rel="noopener noreferrer">
