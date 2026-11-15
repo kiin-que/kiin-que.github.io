@@ -160,3 +160,5 @@
 
 /* Captions keep the same body face as existing image details. */
 .lang-en .detail-figure figcaption { font-family: var(--f-body); }
+
+.detail-main--project .project-work-figure.is-landscape { width: 100%; }
