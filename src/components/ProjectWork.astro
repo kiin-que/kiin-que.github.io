@@ -18,8 +18,8 @@ const t = (key: string) => translate(lang, key);
       </figure>
       <div class="detail-media-link"><a class="reading-back" href={withBase(item.image)} target="_blank" rel="noopener noreferrer">{t('viewOriginalImage')} ↗</a></div>
     </section>)}
-  </div> : <figure class="detail-figure project-work-figure">
-    <img src={withBase(work.image)} width={work.width} height={work.height} alt={work.alt} decoding="async" />
+  </div> : <figure class:list={["detail-figure", "project-work-figure", {"is-landscape": work.width > work.height} ]}>
+    <a href={withBase(work.image)} target="_blank" rel="noopener noreferrer" aria-label={t("viewOriginalImage")}><img src={withBase(work.image)} width={work.width} height={work.height} alt={work.alt} decoding="async" /></a>
     <figcaption>{t('projectPreviewCaption')}</figcaption>
   </figure>}
   {work.sources.length > 0 ? <p slot="source">{t('projectSource')} {work.sources.map((source: {url?: string; label: string}, index: number) => <>{index > 0 && ' · '}<span class="project-source-item">{source.url ? <a class="detail-source-link project-source-link u-grow" href={source.url} target="_blank" rel="noopener noreferrer">{source.label} ↗</a> : source.label}</span></>)}</p> : work.external_url && <p slot="source">{t('projectSource')} <a class="detail-source-link project-work-link u-grow" href={work.external_url} target="_blank" rel="noopener noreferrer">{t('viewOnAgensi')} ↗</a></p>}
